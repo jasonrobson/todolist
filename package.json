@@ -8,9 +8,15 @@
     "react-scripts": "1.1.4"
   },
   "scripts": {
+    "commitmsg": "commitlint -E GIT_PARAMS",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^7.0.0",
+    "@commitlint/config-conventional": "^7.0.1",
+    "husky": "^0.14.3"
   }
 }
