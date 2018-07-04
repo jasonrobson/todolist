@@ -1,40 +1,45 @@
 import React, { Fragment, Component } from "react";
-import ReactDOM from "react-dom";
 import filtros from "./constants";
 
-function addAfter(array, index, newItem) {
-  return [...array.slice(0, index), newItem, ...array.slice(index)];
+class TodoItem
+{
+  constructor(name, isCompleted)
+  {
+    this.name = name;
+    this.isCompleted = isCompleted;
+  }
 }
 
 class App extends Component {
   state = {
     todolist: [],
-    todoListCompleted: [],
     estado: filtros.FILTRO_TODAS
   };
 
   render() {
     return (
       <div>
-        <pre>
-          {JSON.stringify(this.state.todoListCompleted)}
+        <pre>                    
+          {JSON.stringify(this.state.todolist)}
           {JSON.stringify(this.state.estado)}
         </pre>
         <input
           onKeyDown={event => {
             if (event.key === "Enter") {
+              const novoItem = new TodoItem(event.target.value, false);
               this.setState({
-                todolist: [...this.state.todolist, event.target.value],
-                todoListCompleted: [...this.state.todoListCompleted, false]
+                todolist: [...this.state.todolist, novoItem]
               });
             }
           }}
         />
         <br />
-        {this.state.todolist.map((text, index) => {
+
+        
+        {this.state.todolist.map(({ name, isCompleted }, index) => {
           switch (this.state.estado) {
             case filtros.FILTRO_COMPLETADA:
-              if (this.state.todoListCompleted[index]) {
+              if (isCompleted) {
                 return (
                   <Fragment>
                     <input
@@ -43,33 +48,25 @@ class App extends Component {
                       onChange={event => {
                         if (
                           event.target.checked !==
-                          this.state.todoListCompleted[index]
-                        ) {
-                          this.state.todoListCompleted.splice(
-                            index,
-                            1,
-                            event.target.checked
-                          );
+                          isCompleted
+                        ) {                          
+                          this.state.todolist[index].isCompleted = event.target.checked
                           this.setState({
-                            todoListCompleted: [...this.state.todoListCompleted]
+                            todolist: [...this.state.todolist]
                           });
                         }
                       }}
                     />
-                    {this.state.todoListCompleted[index] ? (
-                      <span style={{ backgroundColor: "gray" }}>{text}</span>
+                    {isCompleted ? (
+                      <span style={{ backgroundColor: "gray" }}>{name}</span>
                     ) : (
-                      <span style={{ backgroundColor: "white" }}>{text}</span>
+                      <span style={{ backgroundColor: "white" }}>{name}</span>
                     )}
                     <button
-                      onClick={event => {
-                        this.state.todoListCompleted.splice(index, 1);
+                      onClick={event => {                        
                         this.state.todolist.splice(index, 1);
                         this.setState({
-                          todoListCompleted: [...this.state.todoListCompleted]
-                        });
-                        this.setState({
-                          todolist: [...this.state.todolist]
+                          todolist : [...this.state.todolist]
                         });
                       }}
                     >
@@ -82,7 +79,7 @@ class App extends Component {
                 return null;
               }
             case filtros.FILTRO_NAOCOMPLETADA:
-              if (!this.state.todoListCompleted[index]) {
+              if (!isCompleted) {
                 return (
                   <Fragment>
                     <input
@@ -90,31 +87,23 @@ class App extends Component {
                       onChange={event => {
                         if (
                           event.target.checked !==
-                          this.state.todoListCompleted[index]
-                        ) {
-                          this.state.todoListCompleted.splice(
-                            index,
-                            1,
-                            event.target.checked
-                          );
+                          isCompleted
+                        ) {                          
+                          this.state.todolist[index].isCompleted = event.target.checked
                           this.setState({
-                            todoListCompleted: [...this.state.todoListCompleted]
+                            todolist : [...this.state.todolist]
                           });
                         }
                       }}
                     />
-                    {this.state.todoListCompleted[index] ? (
-                      <span style={{ backgroundColor: "gray" }}>{text}</span>
+                    {isCompleted ? (
+                      <span style={{ backgroundColor: "gray" }}>{name}</span>
                     ) : (
-                      <span style={{ backgroundColor: "white" }}>{text}</span>
+                      <span style={{ backgroundColor: "white" }}>{name}</span>
                     )}
                     <button
                       onClick={event => {
-                        this.state.todoListCompleted.splice(index, 1);
                         this.state.todolist.splice(index, 1);
-                        this.setState({
-                          todoListCompleted: [...this.state.todoListCompleted]
-                        });
                         this.setState({
                           todolist: [...this.state.todolist]
                         });
@@ -131,22 +120,18 @@ class App extends Component {
             default:
               return (
                 <Fragment>
-                  {this.state.todoListCompleted[index] ? (
+                  {isCompleted ? (
                     <input
                       type="checkbox"
                       checked
                       onChange={event => {
                         if (
                           event.target.checked !==
-                          this.state.todoListCompleted[index]
+                          isCompleted
                         ) {
-                          this.state.todoListCompleted.splice(
-                            index,
-                            1,
-                            event.target.checked
-                          );
+                          this.state.todolist[index].isCompleted = event.target.value
                           this.setState({
-                            todoListCompleted: [...this.state.todoListCompleted]
+                            todolist: [...this.state.todolist]
                           });
                         }
                       }}
@@ -157,33 +142,25 @@ class App extends Component {
                       onChange={event => {
                         if (
                           event.target.checked !==
-                          this.state.todoListCompleted[index]
+                          isCompleted
                         ) {
-                          this.state.todoListCompleted.splice(
-                            index,
-                            1,
-                            event.target.checked
-                          );
+                          this.state.todolist[index].isCompleted = event.target.value                          
                           this.setState({
-                            todoListCompleted: [...this.state.todoListCompleted]
+                            todolist: [...this.state.todolist]
                           });
                         }
                       }}
                     />
                   )}
 
-                  {this.state.todoListCompleted[index] ? (
-                    <span style={{ backgroundColor: "gray" }}>{text}</span>
+                  {isCompleted ? (
+                    <span style={{ backgroundColor: "gray" }}>{name}</span>
                   ) : (
-                    <span style={{ backgroundColor: "white" }}>{text}</span>
+                    <span style={{ backgroundColor: "white" }}>{name}</span>
                   )}
                   <button
                     onClick={event => {
-                      this.state.todoListCompleted.splice(index, 1);
                       this.state.todolist.splice(index, 1);
-                      this.setState({
-                        todoListCompleted: [...this.state.todoListCompleted]
-                      });
                       this.setState({
                         todolist: [...this.state.todolist]
                       });
@@ -196,6 +173,8 @@ class App extends Component {
               );
           }
         })}
+
+        
         <hr />
         <center>
           <h3>Filtrar por</h3>
