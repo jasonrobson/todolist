@@ -26,10 +26,7 @@ class App extends Component {
   };
 
   render() {
-    const todolistFiltered = getFilteredTodos({
-      todolist: this.state.todolist,
-      filterBy: this.state.filterBy,
-    })
+    const todolistFiltered = getFilteredTodos(this.state)
 
     return (
       <div>
