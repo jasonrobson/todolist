@@ -1,7 +1,6 @@
 import React, { Fragment, Component } from 'react'
 import _ from 'lodash'
 import { FILTER_ALL, FILTER_COMPLETED, FILTER_IN_PROGRESS } from './constants'
-import { EMLINK } from 'constants';
 
 const toFilter = (filterBy) => {
   const mapping = {
@@ -22,9 +21,14 @@ const getFilteredTodos = ({ todolist, filterBy }) => (
 
 class App extends Component {
   state = {
+    fieldName: '',
     maxId: 0,
     todolist: [],
     filterBy: FILTER_ALL,
+  }
+
+  resetName = () => {
+    this.setState({ fieldName: '' })
   }
 
   render() {
@@ -42,6 +46,7 @@ class App extends Component {
           <br />
           <br />
           <input
+            onBlur={this.resetName}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
                 const newTodo = {
@@ -55,11 +60,12 @@ class App extends Component {
                 }))
               }
             }}
+            // value={this.state.fieldName} //mexer aqui
           />
         </div>
         <br />
         {
-          todolistFiltered.map((todoItem, index) => {
+          todolistFiltered.map((todoItem) => {
             return (
               <Fragment key={todoItem.id}>
                 <input
