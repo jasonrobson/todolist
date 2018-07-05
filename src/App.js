@@ -23,7 +23,7 @@ const toFilter = filterBy => {
 }
 
 const getFilteredTodos = ({ todolist, filterBy }) => (
-  todolist.filter(toFilter('XPTO'))
+  todolist.filter(toFilter(filterBy))
 )
 
 class App extends Component {
