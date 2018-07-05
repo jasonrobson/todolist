@@ -28,6 +28,12 @@ class App extends Component {
   render() {
     const todolistFiltered = getFilteredTodos(this.state)
 
+    const filters = [
+      { filterBy: FILTER_ALL, label: 'Todas' },
+      { filterBy: FILTER_IN_PROGRESS, label: 'Não Completadas' },
+      { filterBy: FILTER_COMPLETED, label: 'Completadas' },
+    ]
+
     return (
       <div>
         <div style={{ paddingLeft: '50%' }}>
@@ -90,30 +96,16 @@ class App extends Component {
           <h3>
             Filtrar por
           </h3>
-          <button
-            type="button"
-            onClick={() => {
-              this.setState({ filterBy: FILTER_ALL });
-            }}
-          >
-            Todas
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              this.setState({ filterBy: FILTER_IN_PROGRESS });
-            }}
-          >
-            Nåo Completadas
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              this.setState({ filterBy: FILTER_COMPLETED });
-            }}
-          >
-            Completadas
-          </button>
+          {filters.map(({ filterBy, label }) => (
+            <button
+              type="button"
+              onClick={() => {
+                this.setState({ filterBy });
+              }}
+              >
+              {label}
+            </button>
+          ))}
         </center>
       </div>
     );
