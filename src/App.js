@@ -64,15 +64,9 @@ class App extends Component {
                     });
                   }}  
                 />
-                {todoItem.isCompleted ? (
-                  <span style={{ backgroundColor: 'gray' }}>
-                    {todoItem.name}
-                  </span>
-                ) : (
-                  <span style={{ backgroundColor: 'white' }}>
-                    {todoItem.name}
-                  </span>
-                )}
+                <span style={{ backgroundColor: todoItem.isCompleted ? 'gray' : 'white' }}>
+                  {todoItem.name}
+                </span>
                 <button
                   type="button"
                   onClick={() => {
