@@ -2,13 +2,6 @@ import React, { Fragment, Component } from 'react';
 import { FILTER_ALL, FILTER_COMPLETED, FILTER_IN_PROGRESS } from './constants';
 import _ from 'lodash'
 
-class TodoItem {
-  constructor(name, isCompleted) {
-    this.name = name;
-    this.isCompleted = isCompleted;
-  }
-}
-
 const toFilter = filterBy => {
   const mapping = {
     [FILTER_COMPLETED]: { isCompleted: true },
@@ -46,9 +39,13 @@ class App extends Component {
           <input
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
-                const novoItem = new TodoItem(event.target.value, false);
+                const newTodo = {
+                  name: event.target.value,
+                  isCompleted: false,
+                };
+
                 this.setState(prevState => ({
-                  todolist: [...prevState.todolist, novoItem],
+                  todolist: [...prevState.todolist, newTodo],
                 }));
               }
             }}
