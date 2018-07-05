@@ -1,5 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import { FILTER_ALL, FILTER_COMPLETED, FILTER_IN_PROGRESS } from './constants';
+import _ from 'lodash'
 
 class TodoItem {
   constructor(name, isCompleted) {
@@ -8,12 +9,20 @@ class TodoItem {
   }
 }
 
-const toFilter = filterBy => todo => {
-  if (filterBy === FILTER_ALL) {
-    return true
+const toFilter = filterBy => {
+  if (filterBy === FILTER_COMPLETED) {
+    return _.matches({
+      isCompleted: true
+    })
   }
 
-  return (filterBy === FILTER_COMPLETED) === todo.isCompleted
+  if (filterBy === FILTER_IN_PROGRESS) {
+    return _.matches({
+      isCompleted: false
+    })
+  }
+
+  return _.constant(true)
 }
 
 const getFilteredTodos = ({ todolist, filterBy }) => (
