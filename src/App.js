@@ -1,6 +1,6 @@
 import React, { Fragment, Component } from 'react';
+import _ from 'lodash';
 import { FILTER_ALL, FILTER_COMPLETED, FILTER_IN_PROGRESS } from './constants';
-import _ from 'lodash'
 
 const toFilter = filterBy => {
   const mapping = {
@@ -26,13 +26,13 @@ class App extends Component {
   };
 
   render() {
-    const todolistFiltered = getFilteredTodos(this.state)
+    const todolistFiltered = getFilteredTodos(this.state);
 
     const filters = [
       { filterBy: FILTER_ALL, label: 'Todas' },
       { filterBy: FILTER_IN_PROGRESS, label: 'Não Completadas' },
       { filterBy: FILTER_COMPLETED, label: 'Completadas' },
-    ]
+    ];
 
     return (
       <div>
@@ -58,17 +58,17 @@ class App extends Component {
         {
           todolistFiltered.map((todoItem, index) => {
             return (
-              <Fragment>
+              <Fragment key={index}>
                 <input
+                  key={index}
                   type="checkbox"
                   checked={todoItem.isCompleted}
                   onChange={(event) => {
                     this.state.todolist[index].isCompleted = event.target.checked;
-
                     this.setState({
                       todolist: this.state.todolist
                     });
-                  }}  
+                  }}
                 />
                 <span style={{ backgroundColor: todoItem.isCompleted ? 'gray' : 'white' }}>
                   {todoItem.name}
@@ -76,10 +76,8 @@ class App extends Component {
                 <button
                   type="button"
                   onClick={() => {
-                    // this.state.todolist.splice(index, 1);
-                    // this.setState(prevState => ({
-                    //   todolist: [...prevState.todolist],
-                    // }));
+                    this.state.todolist.splice(index, 1);
+                    this.setState({ todolist: [...this.state.todolist] });
                   }}
                 >
                   Excluir
@@ -89,8 +87,6 @@ class App extends Component {
             );
           })
         }
-
-
         <hr />
         <center>
           <h3>
@@ -98,11 +94,12 @@ class App extends Component {
           </h3>
           {filters.map(({ filterBy, label }) => (
             <button
+              key={filterBy}
               type="button"
               onClick={() => {
                 this.setState({ filterBy });
               }}
-              >
+            >
               {label}
             </button>
           ))}
