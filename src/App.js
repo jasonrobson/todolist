@@ -15,11 +15,11 @@ const toFilter = filterBy => {
     [FILTER_IN_PROGRESS]: { isCompleted: false },
   }
 
-  if (filterBy === FILTER_ALL) {
-    return _.constant(true)
-  }
+  const predicate = mapping[filterBy]
 
-  return _.matches(mapping[filterBy])
+  return predicate
+    ? _.matches(predicate)
+    : _.constant(true)
 }
 
 const getFilteredTodos = ({ todolist, filterBy }) => (
