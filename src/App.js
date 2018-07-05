@@ -10,23 +10,20 @@ class TodoItem {
 }
 
 const toFilter = filterBy => {
-  if (filterBy === FILTER_COMPLETED) {
-    return _.matches({
-      isCompleted: true
-    })
+  const mapping = {
+    [FILTER_COMPLETED]: { isCompleted: true },
+    [FILTER_IN_PROGRESS]: { isCompleted: false },
   }
 
-  if (filterBy === FILTER_IN_PROGRESS) {
-    return _.matches({
-      isCompleted: false
-    })
+  if (filterBy === FILTER_ALL) {
+    return _.constant(true)
   }
 
-  return _.constant(true)
+  return _.matches(mapping[filterBy])
 }
 
 const getFilteredTodos = ({ todolist, filterBy }) => (
-  todolist.filter(toFilter(filterBy))
+  todolist.filter(toFilter('XPTO'))
 )
 
 class App extends Component {
