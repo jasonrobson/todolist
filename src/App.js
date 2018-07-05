@@ -1,6 +1,5 @@
 import React, { Fragment, Component } from 'react';
-import filtros from './constants';
-//import { list } from 'postcss';
+import { FILTER_ALL, FILTER_COMPLETED, FILTER_IN_PROGRESS } from './constants';
 
 class TodoItem {
   constructor(name, isCompleted) {
@@ -9,14 +8,30 @@ class TodoItem {
   }
 }
 
+const toFilter = filterBy => todo => {
+  if (filterBy === FILTER_ALL) {
+    return true
+  }
+
+  return (filterBy === FILTER_COMPLETED) === todo.isCompleted
+}
+
+const getFilteredTodos = ({ todolist, filterBy }) => (
+  todolist.filter(toFilter(filterBy))
+)
+
 class App extends Component {
   state = {
     todolist: [],
-    estado: filtros.FILTRO_TODAS,
-    listaMostrar: [],
+    filterBy: FILTER_ALL,
   };
 
   render() {
+    const todolistFiltered = getFilteredTodos({
+      todolist: this.state.todolist,
+      filterBy: this.state.filterBy,
+    })
+
     return (
       <div>
         <div style={{ paddingLeft: '50%' }}>
@@ -34,43 +49,20 @@ class App extends Component {
           />
         </div>
         <br />
-
         {
-          (() => {
-            switch (this.state.estado) {
-              case filtros.FILTRO_COMPLETADA:
-                this.state.listaMostrar = this.state.todolist.filter((todoItem) => {
-                  return (todoItem.isCompleted === true);
-                });
-                break;
-              case filtros.FILTRO_NAOCOMPLETADA:
-                this.state.listaMostrar = this.state.todolist.filter((todoItem) => {
-                  return (todoItem.isCompleted === false);
-                });
-                break;
-              default:
-                this.state.listaMostrar = this.state.todolist;
-                break;
-            }
-          })()
-        }
-        {
-          this.state.listaMostrar.map((todoItem) => {
+          todolistFiltered.map((todoItem, index) => {
             return (
               <Fragment>
                 <input
                   type="checkbox"
-                  checked
+                  checked={todoItem.isCompleted}
                   onChange={(event) => {
-                    if (
-                      event.target.checked !== todoItem.isCompleted
-                    ) {
-                      // this.state.todolist[index].isCompleted = event.target.checked;
-                      // this.setState(prevState => ({
-                      //   todolist: [...prevState.todolist],
-                      // }));
-                    }
-                  }}
+                    this.state.todolist[index].isCompleted = event.target.checked;
+
+                    this.setState({
+                      todolist: this.state.todolist
+                    });
+                  }}  
                 />
                 {todoItem.isCompleted ? (
                   <span style={{ backgroundColor: 'gray' }}>
@@ -107,7 +99,7 @@ class App extends Component {
           <button
             type="button"
             onClick={() => {
-              this.setState({ estado: filtros.FILTRO_TODAS });
+              this.setState({ filterBy: FILTER_ALL });
             }}
           >
             Todas
@@ -115,7 +107,7 @@ class App extends Component {
           <button
             type="button"
             onClick={() => {
-              this.setState({ estado: filtros.FILTRO_NAOCOMPLETADA });
+              this.setState({ filterBy: FILTER_IN_PROGRESS });
             }}
           >
             Nåo Completadas
@@ -123,7 +115,7 @@ class App extends Component {
           <button
             type="button"
             onClick={() => {
-              this.setState({ estado: filtros.FILTRO_COMPLETADA });
+              this.setState({ filterBy: FILTER_COMPLETED });
             }}
           >
             Completadas

@@ -1,7 +1,3 @@
-const filtros = {
-  FILTRO_COMPLETADA: 0,
-  FILTRO_NAOCOMPLETADA: 1,
-  FILTRO_TODAS: 2,
-};
-
-export default filtros;
+export const FILTER_COMPLETED = 'COMPLETED';
+export const FILTER_IN_PROGRESS = 'IN_PROGRESS';
+export const FILTER_ALL = 'ALL';
