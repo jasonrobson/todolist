@@ -27,6 +27,7 @@ class App extends Component {
       maxId: 0,
       todolist: [],
       filterBy: FILTER_ALL,
+      orderBy: { completed: false, name: false },
     }
   }
 
@@ -39,14 +40,18 @@ class App extends Component {
   }
 
   render() {
-    const todolistFiltered = getFilteredTodos(this.state)
-
+    let todolistFiltered = getFilteredTodos(this.state)
+    todolistFiltered = _.orderBy(todolistFiltered, ['isCompleted', 'name'],
+      [(this.state.orderBy.completed ? 'asc' : 'desc'), (this.state.orderBy.name ? 'asc' : 'desc')])
     const filters = [
       { filterBy: FILTER_ALL, label: 'Todas' },
       { filterBy: FILTER_IN_PROGRESS, label: 'Não Completadas' },
       { filterBy: FILTER_COMPLETED, label: 'Completadas' },
     ]
-
+    const orders = [
+      { label: 'Ordenar por Completada', orderBy: { completed: !this.state.orderBy.completed, name: this.state.orderBy.name } },
+      { label: 'Ordenar por Nome', orderBy: { completed: this.state.orderBy.completed, name: !this.state.orderBy.name } },
+    ]
     return (
       <div>
         <div style={{ paddingLeft: '50%' }}>
@@ -72,10 +77,24 @@ class App extends Component {
           />
         </div>
         <br />
+        {orders.map(({ label, orderBy }) => {
+          return (
+            <button
+              type="button"
+              onClick={() => {
+                this.setState({ orderBy })
+              }}
+            >
+              { label }
+            </button>
+          )
+        })}
         <br />
         {
           todolistFiltered.map((todoItem) => {
+
             return (
+
               <Fragment key={todoItem.id}>
                 <input
                   type="checkbox"
