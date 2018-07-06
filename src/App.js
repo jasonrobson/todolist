@@ -20,11 +20,18 @@ const getFilteredTodos = ({ todolist, filterBy }) => (
 )
 
 class App extends Component {
-  state = {
-    fieldName: '',
-    maxId: 0,
-    todolist: [],
-    filterBy: FILTER_ALL,
+  constructor() {
+    super()
+    this.state = {
+      fieldName: '',
+      maxId: 0,
+      todolist: [],
+      filterBy: FILTER_ALL,
+    }
+  }
+
+  handleFieldNameChange = (evt) => {
+    this.setState({ fieldName: evt.target.value })
   }
 
   resetName = () => {
@@ -60,9 +67,11 @@ class App extends Component {
                 }))
               }
             }}
-            // value={this.state.fieldName} //mexer aqui
+            onChange={this.handleFieldNameChange}
+            value={this.state.fieldName}
           />
         </div>
+        <br />
         <br />
         {
           todolistFiltered.map((todoItem) => {
