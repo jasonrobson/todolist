@@ -1,7 +1,7 @@
-import React, { Fragment, Component } from 'react'
+import React, { Component } from 'react'
 import _ from 'lodash'
 import { FILTER_ALL, FILTER_COMPLETED, FILTER_IN_PROGRESS } from './constants'
-
+import Todolist from './Todolist'
 
 const toFilter = (filterBy) => {
   const mapping = {
@@ -93,88 +93,66 @@ class App extends Component {
           />
         </div>
         <br />
-        {
-          orders.map(({ label, orderBy: currentOrderBy }) => {
-            return (
-              <button
-                type="button"
-                key={label}
-                onClick={() => {
-                  this.setState({
-                    orderBy: {
-                      ...orderBy,
-                      [currentOrderBy]: invertOrder(orderBy[currentOrderBy]),
-                    },
-                  })
-                }}
-              >
-                { label }
-              </button>
-            )
-          })
-        }
+        <Orders
+          orders={orders}
+          onClick={(currentOrderBy) => {
+            this.setState({
+              orderBy: {
+                ...orderBy,
+                [currentOrderBy]: invertOrder(orderBy[currentOrderBy]),
+              },
+            })
+          }}
+        />
         <br />
-        {
-          <Todolist
-            todolist={todolistOrdered}
-            onDelete={
-            (todoItem) => {
-              const newlist = todolist.filter((todoFilter) => {
-                return (todoFilter.id !== todoItem.id)
-              })
-              this.setState({ todolist: newlist })
-            }
+        <Todolist
+          todolist={todolistOrdered}
+          onDelete={
+          (todoItem) => {
+            const newlist = todolist.filter(todoFilter => (todoFilter.id !== todoItem.id))
+            this.setState({ todolist: newlist })
           }
-            onChange={
-              (todoItem, changes) => {
-                Object.assign(todoItem, changes)
-
-                this.setState({ todolist })
-              }
-          }
-          />
         }
+          onChange={
+            (todoItem, changes) => {
+              Object.assign(todoItem, changes)
+              this.setState({ todolist })
+            }
+        }
+        />
         <hr />
         <center>
           <h3>
             Filtrar por
           </h3>
-          {filters.map(({ filterBy, label }) => (
-            <button
-              key={filterBy}
-              type="button"
-              onClick={() => {
-                this.setState({ filterBy })
-              }}
-            >
-              {label}
-            </button>
-          ))}
+          <Filters filters={filters} onClick={(filterBy) => { this.setState({ filterBy }) }} />
         </center>
       </div>
     )
   }
 }
 
-const Todolist = ({ todolist, onChange, onDelete }) => (
-  todolist.map(todoItem => (
-    <Fragment key={todoItem.id}>
-      <input
-        type="checkbox"
-        checked={todoItem.isCompleted}
-        onChange={(event) => { onChange(todoItem, { isCompleted: event.target.checked }) }}
-      />
-      <span style={{ backgroundColor: todoItem.isCompleted ? 'gray' : 'white' }}>
-        {todoItem.name}
-      </span>
-      <button
-        type="button"
-        onClick={() => onDelete(todoItem)}
-      >
-        Excluir
-      </button>
-      <br />
-    </Fragment>
+const Filters = ({ filters, onClick }) => (
+  filters.map(({ filterBy, label }) => (
+    <button
+      key={filterBy}
+      type="button"
+      onClick={() => { onClick(filterBy) }}
+    >
+      {label}
+    </button>
+  ))
+)
+
+const Orders = ({ orders, onClick }) => (
+  orders.map(({ label, orderBy: currentOrderBy }) => (
+    <button
+      type="button"
+      key={label}
+      onClick={() => { onClick(currentOrderBy) }}
+    >
+      { label }
+    </button>
   ))
 )
 
