@@ -113,7 +113,7 @@ class App extends Component {
         {
           <ShowList
             todolist={todolistFiltered}
-            excludeEvent={
+            onDelete={
             (todoItem) => {
               const newlist = this.state.todolist.filter((todoFilter) => {
                 return (todoFilter.id !== todoItem.id)
@@ -121,12 +121,13 @@ class App extends Component {
               this.setState({ todolist: newlist })
             }
           }
-            checkEvent={
-              (event, todoItem) => {
+            onChange={
+              (todoItem, newAttributes) => {
                 const element = this.state.todolist.find((todoFilter) => {
                   return (todoFilter.id === todoItem.id)
                 })
-                element.isCompleted = event.target.checked
+
+                Object.assign(element, newAttributes)
                 this.setState({ todolist: this.state.todolist })
               }
           }
@@ -154,20 +155,20 @@ class App extends Component {
   }
 }
 
-const ShowList = ({ todolist, checkEvent, excludeEvent }) => (
+const ShowList = ({ todolist, onChange, onDelete }) => (
   todolist.map(todoItem => (
     <Fragment key={todoItem.id}>
       <input
         type="checkbox"
         checked={todoItem.isCompleted}
-        onChange={(event) => { checkEvent(event, todoItem) }}
+        onChange={(event) => { onChange(todoItem, { isCompleted: event.target.checked }) }}
       />
       <span style={{ backgroundColor: todoItem.isCompleted ? 'gray' : 'white' }}>
         {todoItem.name}
       </span>
       <button
         type="button"
-        onClick={() => excludeEvent(todoItem)}
+        onClick={() => onDelete(todoItem)}
       >
         Excluir
       </button>
