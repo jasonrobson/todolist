@@ -20,6 +20,10 @@ const getFilteredTodos = ({ todolist, filterBy }) => (
   todolist.filter(toFilter(filterBy))
 )
 
+const invertOrder = (order) => {
+  return order === 'asc' ? 'desc' : 'asc'
+}
+
 class App extends Component {
   constructor() {
     super()
@@ -83,21 +87,19 @@ class App extends Component {
             return (
               <button
                 type="button"
+                key={label}
                 onClick={() => {
                   const newOrderBy = (orderBy === 'completed' ? (
-                      this.state.orderBy.completed === 'asc' ? {
-                        completed: 'desc', name: this.state.orderBy.name
-                      } : {
-                        completed: 'asc', name: this.state.orderBy.name
-                      }
-                    ) :
-                    (
-                      this.state.orderBy.name === 'asc' ? {
-                        completed: this.state.orderBy.completed, name: 'desc'
-                      } : {
-                        completed: this.state.orderBy.completed, name: 'asc'
-                      }
-                    )
+                    {
+                      completed: invertOrder(this.state.orderBy.completed),
+                      name: this.state.orderBy.name,
+                    }
+                  ) : (
+                    {
+                      completed: this.state.orderBy.completed,
+                      name: invertOrder(this.state.orderBy.name),
+                    }
+                  )
                   )
                   this.setState({ orderBy: newOrderBy })
                 }}
@@ -112,6 +114,7 @@ class App extends Component {
           todolistFiltered.map((todoItem) => {
             return (
               <ShowList
+                key={todoItem.id}
                 todoItem={todoItem}
                 excludeEvent={
                 () => {
@@ -160,7 +163,7 @@ class ShowList extends Component {
   render()
   {
     return (
-      <Fragment key={this.props.todoItem.id}>
+      <Fragment>
         <input
           type="checkbox"
           checked={this.props.todoItem.isCompleted}
