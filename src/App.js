@@ -111,7 +111,7 @@ class App extends Component {
         }
         <br />
         {
-          <ShowList
+          <Todolist
             todolist={todolistFiltered}
             onDelete={
             (todoItem) => {
@@ -155,7 +155,7 @@ class App extends Component {
   }
 }
 
-const ShowList = ({ todolist, onChange, onDelete }) => (
+const Todolist = ({ todolist, onChange, onDelete }) => (
   todolist.map(todoItem => (
     <Fragment key={todoItem.id}>
       <input
