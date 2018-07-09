@@ -49,12 +49,10 @@ class App extends Component {
       todolist,
       orderBy,
       fieldName,
-      maxId,
     } = this.state
 
-    let todolistFiltered = getFilteredTodos(this.state)
-    todolistFiltered = _.orderBy(todolistFiltered, ['isCompleted', 'name'],
-      [orderBy.completed, orderBy.name])
+    const todolistFiltered = getFilteredTodos(this.state)
+    const todolistOrdered = _.orderBy(todolistFiltered, ['isCompleted', 'name'], [orderBy.completed, orderBy.name])
     const filters = [
       { filterBy: FILTER_ALL, label: 'Todas' },
       { filterBy: FILTER_IN_PROGRESS, label: 'Não Completadas' },
@@ -64,6 +62,7 @@ class App extends Component {
       { label: 'Ordenar por Completada', orderBy: 'completed' },
       { label: 'Ordenar por Nome', orderBy: 'name' },
     ]
+
     return (
       <div>
         <div style={{ paddingLeft: '50%' }}>
@@ -73,15 +72,20 @@ class App extends Component {
             onBlur={this.resetName}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
-                const newTodo = {
-                  id: maxId + 1,
-                  name: event.target.value,
-                  isCompleted: false,
-                }
-                this.setState(prevState => ({
-                  todolist: [...prevState.todolist, newTodo],
-                  maxId: maxId + 1,
-                }))
+                const name = event.target.value
+
+                this.setState((prevState) => {
+                  const newTodo = {
+                    id: prevState.maxId + 1,
+                    isCompleted: false,
+                    name,
+                  }
+
+                  return {
+                    todolist: [...prevState.todolist, newTodo],
+                    maxId: prevState.maxId + 1,
+                  }
+                })
               }
             }}
             onChange={this.handleFieldNameChange}
@@ -96,19 +100,12 @@ class App extends Component {
                 type="button"
                 key={label}
                 onClick={() => {
-                  const newOrderBy = (currentOrderBy === 'completed' ? (
-                    {
-                      completed: invertOrder(orderBy.completed),
-                      name: orderBy.name,
-                    }
-                  ) : (
-                    {
-                      completed: orderBy.completed,
-                      name: invertOrder(orderBy.name),
-                    }
-                  )
-                  )
-                  this.setState({ orderBy: newOrderBy })
+                  this.setState({
+                    orderBy: {
+                      ...orderBy,
+                      [currentOrderBy]: invertOrder(orderBy[currentOrderBy]),
+                    },
+                  })
                 }}
               >
                 { label }
@@ -119,7 +116,7 @@ class App extends Component {
         <br />
         {
           <Todolist
-            todolist={todolistFiltered}
+            todolist={todolistOrdered}
             onDelete={
             (todoItem) => {
               const newlist = todolist.filter((todoFilter) => {
