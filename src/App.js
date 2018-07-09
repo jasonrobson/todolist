@@ -111,31 +111,26 @@ class App extends Component {
         }
         <br />
         {
-          todolistFiltered.map((todoItem) => {
-            return (
-              <ShowList
-                key={todoItem.id}
-                todoItem={todoItem}
-                excludeEvent={
-                () => {
-                  const newlist = this.state.todolist.filter((todoFilter) => {
-                    return (todoFilter.id !== todoItem.id)
-                  })
-                  this.setState({ todolist: newlist })
-                }
+          <ShowList
+            todolist={todolistFiltered}
+            excludeEvent={
+            (todoItem) => {
+              const newlist = this.state.todolist.filter((todoFilter) => {
+                return (todoFilter.id !== todoItem.id)
+              })
+              this.setState({ todolist: newlist })
+            }
+          }
+            checkEvent={
+              (event, todoItem) => {
+                const element = this.state.todolist.find((todoFilter) => {
+                  return (todoFilter.id === todoItem.id)
+                })
+                element.isCompleted = event.target.checked
+                this.setState({ todolist: this.state.todolist })
               }
-                checkEvent={
-                  (event) => {
-                    const element = this.state.todolist.find((todoFilter) => {
-                      return (todoFilter.id === todoItem.id)
-                    })
-                    element.isCompleted = event.target.checked
-                    this.setState({ todolist: this.state.todolist })
-                  }
-              }
-              />
-            )
-          })
+          }
+          />
         }
         <hr />
         <center>
@@ -159,24 +154,26 @@ class App extends Component {
   }
 }
 
-const ShowList = ({ todoItem, checkEvent, excludeEvent }) => (
-  <Fragment>
-    <input
-      type="checkbox"
-      checked={todoItem.isCompleted}
-      onChange={checkEvent}
-    />
-    <span style={{ backgroundColor: todoItem.isCompleted ? 'gray' : 'white' }}>
-      {todoItem.name}
-    </span>
-    <button
-      type="button"
-      onClick={excludeEvent}
-    >
-      Excluir
-    </button>
-    <br />
-  </Fragment>
+const ShowList = ({ todolist, checkEvent, excludeEvent }) => (
+  todolist.map(todoItem => (
+    <Fragment key={todoItem.id}>
+      <input
+        type="checkbox"
+        checked={todoItem.isCompleted}
+        onChange={(event) => { checkEvent(event, todoItem) }}
+      />
+      <span style={{ backgroundColor: todoItem.isCompleted ? 'gray' : 'white' }}>
+        {todoItem.name}
+      </span>
+      <button
+        type="button"
+        onClick={() => excludeEvent(todoItem)}
+      >
+        Excluir
+      </button>
+      <br />
+    </Fragment>
+  ))
 )
 
 export default App
