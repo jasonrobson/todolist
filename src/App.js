@@ -129,12 +129,9 @@ class App extends Component {
             }
           }
             onChange={
-              (todoItem, newAttributes) => {
-                const element = todolist.find((todoFilter) => {
-                  return (todoFilter.id === todoItem.id)
-                })
+              (todoItem, changes) => {
+                Object.assign(todoItem, changes)
 
-                Object.assign(element, newAttributes)
                 this.setState({ todolist })
               }
           }
