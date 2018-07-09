@@ -2,6 +2,7 @@ import React, { Fragment, Component } from 'react'
 import _ from 'lodash'
 import { FILTER_ALL, FILTER_COMPLETED, FILTER_IN_PROGRESS } from './constants'
 
+
 const toFilter = (filterBy) => {
   const mapping = {
     [FILTER_COMPLETED]: { isCompleted: true },
@@ -90,44 +91,7 @@ class App extends Component {
           )
         })}
         <br />
-        {
-          todolistFiltered.map((todoItem) => {
-
-            return (
-
-              <Fragment key={todoItem.id}>
-                <input
-                  type="checkbox"
-                  checked={todoItem.isCompleted}
-                  onChange={(event) => {
-                    const element = this.state.todolist.find((todoFilter) => {
-                      return (todoFilter.id === todoItem.id)
-                    })
-                    element.isCompleted = event.target.checked
-                    this.setState({
-                      todolist: this.state.todolist
-                    })
-                  }}
-                />
-                <span style={{ backgroundColor: todoItem.isCompleted ? 'gray' : 'white' }}>
-                  {todoItem.name}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const todoListFiltered = this.state.todolist.filter((todoFilter) => {
-                      return (todoFilter.id !== todoItem.id)
-                    })
-                    this.setState({ todolist: todoListFiltered })
-                  }}
-                >
-                  Excluir
-                </button>
-                <br />
-              </Fragment>
-            )
-          })
-        }
+        <ShowList todolist={todolistFiltered} />
         <hr />
         <center>
           <h3>
@@ -147,6 +111,78 @@ class App extends Component {
         </center>
       </div>
     )
+  }
+}
+
+class ShowList extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      todolist: [],
+    }
+  }
+
+  componentDidMount() {    
+    this.updateTodoList(this.props.todolist)
+  }
+/* excedeu a qtd maxima de atualizacoes
+  componentDidUpdate() {
+    this.setState({
+      todolist: [...this.props.todolist],
+    })
+  }
+*/
+  componentWillReceiveProps()
+  {
+    this.updateTodoList(this.props.todolist)
+  }
+
+  updateTodoList(list) {
+    this.setState({todolist: [...list]})
+  }
+
+  render()
+  {
+    return (
+      <div>
+      {      
+        this.state.todolist.map((todoItem) => {
+          return (
+            <Fragment key={todoItem.id}>
+              <input
+                type="checkbox"
+                checked={todoItem.isCompleted}
+                onChange={(event) => {
+                  const element = this.state.todolist.find((todoFilter) => {
+                    return (todoFilter.id === todoItem.id)
+                  })
+                  element.isCompleted = event.target.checked
+                  this.setState({
+                    todolist: this.state.todolist
+                  })
+                }}
+              />
+              <span style={{ backgroundColor: todoItem.isCompleted ? 'gray' : 'white' }}>
+                {todoItem.name}
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  const todolist = this.state.todolist.filter((todoFilter) => {
+                    return (todoFilter.id !== todoItem.id)
+                  })
+                  this.setState({ todolist: todolist })
+                }}
+              >
+                Excluir
+              </button>
+              <br />
+            </Fragment>
+          )
+        })
+      }
+      </div>
+    );
   }
 }
 
