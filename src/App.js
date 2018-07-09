@@ -159,29 +159,24 @@ class App extends Component {
   }
 }
 
-class ShowList extends Component {
-  render()
-  {
-    return (
-      <Fragment>
-        <input
-          type="checkbox"
-          checked={this.props.todoItem.isCompleted}
-          onChange={this.props.checkEvent}
-        />
-        <span style={{ backgroundColor: this.props.todoItem.isCompleted ? 'gray' : 'white' }}>
-          {this.props.todoItem.name}
-        </span>
-        <button
-          type="button"
-          onClick={this.props.excludeEvent}
-        >
-          Excluir
-        </button>
-        <br />
-      </Fragment>
-    );
-  }
-}
+const ShowList = ({ todoItem, checkEvent, excludeEvent }) => (
+  <Fragment>
+    <input
+      type="checkbox"
+      checked={todoItem.isCompleted}
+      onChange={checkEvent}
+    />
+    <span style={{ backgroundColor: todoItem.isCompleted ? 'gray' : 'white' }}>
+      {todoItem.name}
+    </span>
+    <button
+      type="button"
+      onClick={excludeEvent}
+    >
+      Excluir
+    </button>
+    <br />
+  </Fragment>
+)
 
 export default App
