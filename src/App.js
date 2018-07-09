@@ -28,7 +28,7 @@ class App extends Component {
       maxId: 0,
       todolist: [],
       filterBy: FILTER_ALL,
-      orderBy: { completed: false, name: false },
+      orderBy: { completed: 'asc', name: 'asc' },
     }
   }
 
@@ -43,15 +43,15 @@ class App extends Component {
   render() {
     let todolistFiltered = getFilteredTodos(this.state)
     todolistFiltered = _.orderBy(todolistFiltered, ['isCompleted', 'name'],
-      [(this.state.orderBy.completed ? 'asc' : 'desc'), (this.state.orderBy.name ? 'asc' : 'desc')])
+      [this.state.orderBy.completed, this.state.orderBy.name])
     const filters = [
       { filterBy: FILTER_ALL, label: 'Todas' },
       { filterBy: FILTER_IN_PROGRESS, label: 'Não Completadas' },
       { filterBy: FILTER_COMPLETED, label: 'Completadas' },
     ]
     const orders = [
-      { label: 'Ordenar por Completada', orderBy: { completed: !this.state.orderBy.completed, name: this.state.orderBy.name } },
-      { label: 'Ordenar por Nome', orderBy: { completed: this.state.orderBy.completed, name: !this.state.orderBy.name } },
+      { label: 'Ordenar por Completada', orderBy: 'completed' },
+      { label: 'Ordenar por Nome', orderBy: 'name' },
     ]
     return (
       <div>
@@ -78,20 +78,62 @@ class App extends Component {
           />
         </div>
         <br />
-        {orders.map(({ label, orderBy }) => {
-          return (
-            <button
-              type="button"
-              onClick={() => {
-                this.setState({ orderBy })
-              }}
-            >
-              { label }
-            </button>
-          )
-        })}
+        {
+          orders.map(({ label, orderBy }) => {
+            return (
+              <button
+                type="button"
+                onClick={() => {
+                  const newOrderBy = (orderBy === 'completed' ? (
+                      this.state.orderBy.completed === 'asc' ? {
+                        completed: 'desc', name: this.state.orderBy.name
+                      } : {
+                        completed: 'asc', name: this.state.orderBy.name
+                      }
+                    ) :
+                    (
+                      this.state.orderBy.name === 'asc' ? {
+                        completed: this.state.orderBy.completed, name: 'desc'
+                      } : {
+                        completed: this.state.orderBy.completed, name: 'asc'
+                      }
+                    )
+                  )
+                  this.setState({ orderBy: newOrderBy })
+                }}
+              >
+                { label }
+              </button>
+            )
+          })
+        }
         <br />
-        <ShowList todolist={todolistFiltered} />
+        {
+          todolistFiltered.map((todoItem) => {
+            return (
+              <ShowList
+                todoItem={todoItem}
+                excludeEvent={
+                () => {
+                  const newlist = this.state.todolist.filter((todoFilter) => {
+                    return (todoFilter.id !== todoItem.id)
+                  })
+                  this.setState({ todolist: newlist })
+                }
+              }
+                checkEvent={
+                  (event) => {
+                    const element = this.state.todolist.find((todoFilter) => {
+                      return (todoFilter.id === todoItem.id)
+                    })
+                    element.isCompleted = event.target.checked
+                    this.setState({ todolist: this.state.todolist })
+                  }
+              }
+              />
+            )
+          })
+        }
         <hr />
         <center>
           <h3>
@@ -115,73 +157,26 @@ class App extends Component {
 }
 
 class ShowList extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      todolist: [],
-    }
-  }
-
-  componentDidMount() {    
-    this.updateTodoList(this.props.todolist)
-  }
-/* excedeu a qtd maxima de atualizacoes
-  componentDidUpdate() {
-    this.setState({
-      todolist: [...this.props.todolist],
-    })
-  }
-*/
-  componentWillReceiveProps()
-  {
-    this.updateTodoList(this.props.todolist)
-  }
-
-  updateTodoList(list) {
-    this.setState({todolist: [...list]})
-  }
-
   render()
   {
     return (
-      <div>
-      {      
-        this.state.todolist.map((todoItem) => {
-          return (
-            <Fragment key={todoItem.id}>
-              <input
-                type="checkbox"
-                checked={todoItem.isCompleted}
-                onChange={(event) => {
-                  const element = this.state.todolist.find((todoFilter) => {
-                    return (todoFilter.id === todoItem.id)
-                  })
-                  element.isCompleted = event.target.checked
-                  this.setState({
-                    todolist: this.state.todolist
-                  })
-                }}
-              />
-              <span style={{ backgroundColor: todoItem.isCompleted ? 'gray' : 'white' }}>
-                {todoItem.name}
-              </span>
-              <button
-                type="button"
-                onClick={() => {
-                  const todolist = this.state.todolist.filter((todoFilter) => {
-                    return (todoFilter.id !== todoItem.id)
-                  })
-                  this.setState({ todolist: todolist })
-                }}
-              >
-                Excluir
-              </button>
-              <br />
-            </Fragment>
-          )
-        })
-      }
-      </div>
+      <Fragment key={this.props.todoItem.id}>
+        <input
+          type="checkbox"
+          checked={this.props.todoItem.isCompleted}
+          onChange={this.props.checkEvent}
+        />
+        <span style={{ backgroundColor: this.props.todoItem.isCompleted ? 'gray' : 'white' }}>
+          {this.props.todoItem.name}
+        </span>
+        <button
+          type="button"
+          onClick={this.props.excludeEvent}
+        >
+          Excluir
+        </button>
+        <br />
+      </Fragment>
     );
   }
 }
