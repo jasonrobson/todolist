@@ -3,10 +3,19 @@ import _ from 'lodash'
 import Todolist from './Todolist'
 import Filters, { toFilter } from './Filters'
 import { FILTER_ALL } from './constants'
-import Orders, { invertOrder } from './Orders'
+import Orders from './Orders'
 
 const getFilteredTodos = ({ todolist, filterBy }) => (
   todolist.filter(toFilter(filterBy))
+)
+
+const BottomToolbar = ({ onChangeFilter }) => (
+  <center>
+    <h3>
+      Filtrar por
+    </h3>
+    <Filters onClick={onChangeFilter} />
+  </center>
 )
 
 class App extends Component {
@@ -70,14 +79,8 @@ class App extends Component {
         </div>
         <br />
         <Orders
-          onClick={(currentOrderBy) => {
-            this.setState({
-              orderBy: {
-                ...orderBy,
-                [currentOrderBy]: invertOrder(orderBy[currentOrderBy]),
-              },
-            })
-          }}
+          initialValues={orderBy}
+          onChange={newOrderBy => this.setState({ orderBy: newOrderBy })}
         />
         <br />
         <Todolist
@@ -96,12 +99,9 @@ class App extends Component {
         }
         />
         <hr />
-        <center>
-          <h3>
-            Filtrar por
-          </h3>
-          <Filters onClick={(filterBy) => { this.setState({ filterBy }) }} />
-        </center>
+        <BottomToolbar
+          onChangeFilter={(filterBy) => { this.setState({ filterBy }) }}
+        />
       </div>
     )
   }
