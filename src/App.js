@@ -54,7 +54,6 @@ class App extends Component {
           <br />
           <br />
           <input
-            onBlur={this.resetName}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
                 const name = event.target.value
@@ -70,6 +69,8 @@ class App extends Component {
                     todolist: [...prevState.todolist, newTodo],
                     maxId: prevState.maxId + 1,
                   }
+                }, () => {
+                  this.resetName()
                 })
               }
             }}
