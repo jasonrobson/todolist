@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
-import Todolist from './Todolist'
+import TodoList from './TodoList'
 import Filters, { toFilter } from './Filters'
 import { FILTER_ALL } from './constants'
 import Orders from './Orders'
@@ -83,14 +83,13 @@ class App extends Component {
           onChange={newOrderBy => this.setState({ orderBy: newOrderBy })}
         />
         <br />
-        <Todolist
+        <TodoList
           todos={todolistOrdered}
-          onDelete={
-          (todoItem) => {
-            const newlist = todolist.filter(todoFilter => (todoFilter.id !== todoItem.id))
-            this.setState({ todolist: newlist })
-          }
-        }
+          onDelete={(todo) => {
+            this.setState({
+              todolist: _.without(todolist, todo),
+            })
+          }}
           onChange={
             (todoItem, changes) => {
               Object.assign(todoItem, changes)

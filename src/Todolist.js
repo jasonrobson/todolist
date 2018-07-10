@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import TodoText from './TodoText'
 
-const Todolist = ({ todos, onChange, onDelete }) => (
+const TodoList = ({ todos, onChange, onDelete }) => (
   todos.map(todo => (
     <Fragment key={todo.id}>
       <input
@@ -24,4 +24,4 @@ const Todolist = ({ todos, onChange, onDelete }) => (
   ))
 )
 
-export default Todolist
+export default TodoList
