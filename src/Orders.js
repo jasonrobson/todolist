@@ -1,8 +1,8 @@
 import React from 'react'
 
-export const invertOrder = (order) => {
-  return order === 'asc' ? 'desc' : 'asc'
-}
+export const invertOrder = order => (
+  order === 'asc' ? 'desc' : 'asc'
+)
 
 export const orders = [
   { label: 'Ordenar por Completada', orderBy: 'completed' },
