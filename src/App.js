@@ -81,7 +81,7 @@ class App extends Component {
         />
         <br />
         <Todolist
-          todolist={todolistOrdered}
+          todos={todolistOrdered}
           onDelete={
           (todoItem) => {
             const newlist = todolist.filter(todoFilter => (todoFilter.id !== todoItem.id))
