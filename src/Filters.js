@@ -13,9 +13,7 @@ export const toFilter = (filterBy) => {
     [FILTER_COMPLETED]: { isCompleted: true },
     [FILTER_IN_PROGRESS]: { isCompleted: false },
   }
-
   const predicate = mapping[filterBy]
-
   return predicate
     ? _.matches(predicate)
     : _.constant(true)

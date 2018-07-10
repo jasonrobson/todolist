@@ -10,11 +10,11 @@ export const orders = [
 ]
 
 const Orders = ({ onClick }) => (
-  orders.map(({ label, orderBy: currentOrderBy }) => (
+  orders.map(({ label, orderBy }) => (
     <button
       type="button"
       key={label}
-      onClick={() => { onClick(currentOrderBy) }}
+      onClick={() => { onClick(orderBy) }}
     >
       { label }
     </button>
