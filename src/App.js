@@ -1,20 +1,8 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
-import { FILTER_ALL, FILTER_COMPLETED, FILTER_IN_PROGRESS } from './constants'
 import Todolist from './Todolist'
-
-const toFilter = (filterBy) => {
-  const mapping = {
-    [FILTER_COMPLETED]: { isCompleted: true },
-    [FILTER_IN_PROGRESS]: { isCompleted: false },
-  }
-
-  const predicate = mapping[filterBy]
-
-  return predicate
-    ? _.matches(predicate)
-    : _.constant(true)
-}
+import Filters, { toFilter } from './Filters'
+import { FILTER_ALL } from './constants'
 
 const getFilteredTodos = ({ todolist, filterBy }) => (
   todolist.filter(toFilter(filterBy))
@@ -53,11 +41,7 @@ class App extends Component {
 
     const todolistFiltered = getFilteredTodos(this.state)
     const todolistOrdered = _.orderBy(todolistFiltered, ['isCompleted', 'name'], [orderBy.completed, orderBy.name])
-    const filters = [
-      { filterBy: FILTER_ALL, label: 'Todas' },
-      { filterBy: FILTER_IN_PROGRESS, label: 'Não Completadas' },
-      { filterBy: FILTER_COMPLETED, label: 'Completadas' },
-    ]
+
     const orders = [
       { label: 'Ordenar por Completada', orderBy: 'completed' },
       { label: 'Ordenar por Nome', orderBy: 'name' },
@@ -125,24 +109,12 @@ class App extends Component {
           <h3>
             Filtrar por
           </h3>
-          <Filters filters={filters} onClick={(filterBy) => { this.setState({ filterBy }) }} />
+          <Filters onClick={(filterBy) => { this.setState({ filterBy }) }} />
         </center>
       </div>
     )
   }
 }
-
-const Filters = ({ filters, onClick }) => (
-  filters.map(({ filterBy, label }) => (
-    <button
-      key={filterBy}
-      type="button"
-      onClick={() => { onClick(filterBy) }}
-    >
-      {label}
-    </button>
-  ))
-)
 
 const Orders = ({ orders, onClick }) => (
   orders.map(({ label, orderBy: currentOrderBy }) => (
