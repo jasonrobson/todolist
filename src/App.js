@@ -3,14 +3,11 @@ import _ from 'lodash'
 import Todolist from './Todolist'
 import Filters, { toFilter } from './Filters'
 import { FILTER_ALL } from './constants'
+import Orders, { invertOrder } from './Orders'
 
 const getFilteredTodos = ({ todolist, filterBy }) => (
   todolist.filter(toFilter(filterBy))
 )
-
-const invertOrder = (order) => {
-  return order === 'asc' ? 'desc' : 'asc'
-}
 
 class App extends Component {
   constructor() {
@@ -41,11 +38,6 @@ class App extends Component {
 
     const todolistFiltered = getFilteredTodos(this.state)
     const todolistOrdered = _.orderBy(todolistFiltered, ['isCompleted', 'name'], [orderBy.completed, orderBy.name])
-
-    const orders = [
-      { label: 'Ordenar por Completada', orderBy: 'completed' },
-      { label: 'Ordenar por Nome', orderBy: 'name' },
-    ]
 
     return (
       <div>
@@ -78,7 +70,6 @@ class App extends Component {
         </div>
         <br />
         <Orders
-          orders={orders}
           onClick={(currentOrderBy) => {
             this.setState({
               orderBy: {
@@ -115,17 +106,5 @@ class App extends Component {
     )
   }
 }
-
-const Orders = ({ orders, onClick }) => (
-  orders.map(({ label, orderBy: currentOrderBy }) => (
-    <button
-      type="button"
-      key={label}
-      onClick={() => { onClick(currentOrderBy) }}
-    >
-      { label }
-    </button>
-  ))
-)
 
 export default App
