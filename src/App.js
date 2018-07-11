@@ -4,6 +4,7 @@ import TodoList from './TodoList'
 import Filters, { toFilter } from './Filters'
 import { FILTER_ALL } from './constants'
 import Orders from './Orders'
+import Registerer from './Registerer'
 
 const getFilteredTodos = ({ todolist, filterBy }) => (
   todolist.filter(toFilter(filterBy))
@@ -22,7 +23,6 @@ class App extends Component {
   constructor() {
     super()
     this.state = {
-      fieldName: '',
       maxId: 0,
       todolist: [],
       filterBy: FILTER_ALL,
@@ -30,19 +30,10 @@ class App extends Component {
     }
   }
 
-  handleFieldNameChange = (evt) => {
-    this.setState({ fieldName: evt.target.value })
-  }
-
-  resetName = () => {
-    this.setState({ fieldName: '' })
-  }
-
   render() {
     const {
-      todolist,
       orderBy,
-      fieldName,
+      maxId,
     } = this.state
 
     const todolistFiltered = getFilteredTodos(this.state)
@@ -53,29 +44,17 @@ class App extends Component {
         <div style={{ paddingLeft: '50%' }}>
           <br />
           <br />
-          <input
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                const name = event.target.value
-
-                this.setState((prevState) => {
-                  const newTodo = {
-                    id: prevState.maxId + 1,
-                    isCompleted: false,
-                    name,
-                  }
-
-                  return {
-                    todolist: [...prevState.todolist, newTodo],
-                    maxId: prevState.maxId + 1,
-                  }
-                }, () => {
-                  this.resetName()
-                })
-              }
-            }}
-            onChange={this.handleFieldNameChange}
-            value={fieldName}
+          <Registerer
+            maxId={maxId}
+            onChange={(todoItem) => {
+              this.setState((prevState) => {
+                return {
+                  todolist: [...prevState.todolist, todoItem],
+                  maxId: prevState.maxId + 1,
+                }
+              })
+            }
+          }
           />
         </div>
         <br />

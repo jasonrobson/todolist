@@ -27,7 +27,6 @@ class Orders extends Component {
             ...payload,
             [orderBy]: invertOrder(payload[orderBy]),
           }
-
           this.setState({ payload: newPayload })
           onChange(newPayload)
         }}
