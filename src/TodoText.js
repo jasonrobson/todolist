@@ -31,15 +31,13 @@ class TodoText extends Component {
         defaultValue={todo.name}
         onKeyDown={(event) => {
           const newName = event.target.value
-
           if (event.key === 'Enter') {
-            onChange({ name: newName })
+            onChange({ ...todo, name: newName })
             this.setState({ changing: false })
           }
         }}
         onKeyUp={(event) => {
           const newName = event.target.value
-
           this.setState({
             changing: newName !== todo.name,
           })

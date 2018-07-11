@@ -87,14 +87,18 @@ class App extends Component {
         <TodoList
           todos={todolistOrdered}
           onDelete={(todo) => {
-            this.setState({
-              todolist: _.without(todolist, todo),
+            this.setState((prevState) => {
+              return {
+                todolist: _.without(prevState.todolist, todo),
+              }
             })
           }}
           onChange={
             (todoItem, changes) => {
-              Object.assign(todoItem, changes)
-              this.setState({ todolist })
+              this.setState((prevState) => {
+                const newTodoList = _.without(prevState.todolist, todoItem)
+                return { todolist: [...newTodoList, _.cloneDeep(changes)] }
+              })
             }
         }
         />

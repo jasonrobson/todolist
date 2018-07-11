@@ -7,7 +7,7 @@ const TodoList = ({ todos, onChange, onDelete }) => (
       <input
         type="checkbox"
         checked={todo.isCompleted}
-        onChange={event => onChange(todo, { isCompleted: event.target.checked })}
+        onChange={event => onChange(todo, { ...todo, isCompleted: event.target.checked })}
       />
       <TodoText
         todo={todo}
