@@ -3,7 +3,7 @@ import _ from 'lodash'
 import TodoList from './TodoList'
 import Filters, { toFilter } from './Filters'
 import { FILTER_ALL } from './constants'
-import Orders from './Orders'
+import Orders, { OrderContext } from './Orders'
 import Registerer from './Registerer'
 
 const getFilteredTodos = ({ todolist, filterBy }) => (
@@ -58,10 +58,11 @@ class App extends Component {
           />
         </div>
         <br />
-        <Orders
-          initialValues={orderBy}
-          onChange={newOrderBy => this.setState({ orderBy: newOrderBy })}
-        />
+        <OrderContext.Provider value={orderBy}>
+          <Orders
+            onChange={newOrderBy => this.setState({ orderBy: newOrderBy })}
+          />
+        </OrderContext.Provider>
         <br />
         <TodoList
           todos={todolistOrdered}
