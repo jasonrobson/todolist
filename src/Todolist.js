@@ -3,6 +3,8 @@ import _ from 'lodash'
 import TodoText, { TodoTextContext } from './TodoText'
 import Filters, { toFilter } from './Filters'
 
+import { OrderConsumer } from './OrderContext'
+
 export const TodoListContext = createContext({
   todos: [],
   changeTodo: () => {},
@@ -14,48 +16,51 @@ const getFilteredTodos = ({ todolist, filterBy }) => (
 )
 
 const TodoList = () => (
-  <TodoListContext.Consumer>
-    {({
-      todolist,
-      changeTodo,
-      deleteTodo: onDelete,
-      filterBy,
-      orderBy,
-    }) => {
-      const todolistFiltered = getFilteredTodos({ todolist, filterBy })
-      const todolistOrdered = _.orderBy(todolistFiltered, ['isCompleted', 'name'], [orderBy.completed, orderBy.name])
-      return (
-        todolistOrdered.map((todo) => {
+  <OrderConsumer>
+    {({ orders }) => (console.log(orders),
+      <TodoListContext.Consumer>
+        {({
+          todolist,
+          changeTodo,
+          deleteTodo: onDelete,
+          filterBy,
+        }) => {
+          const todolistFiltered = getFilteredTodos({ todolist, filterBy })
+          const todolistOrdered = _.orderBy(todolistFiltered, ['isCompleted', 'name'], [orders.completed, orders.name])
           return (
-            <Fragment key={todo.id}>
-              <input
-                type="checkbox"
-                checked={todo.isCompleted}
-                onChange={
-                  (event) => {
-                    const payload = {
-                      ...todo,
-                      isCompleted: event.target.checked,
-                    }
-                    changeTodo(todo, payload)
-                  }}
-              />
-              <TodoTextContext.Provider value={todo}>
-                <TodoText />
-              </TodoTextContext.Provider>
-              <button
-                type="button"
-                onClick={() => onDelete(todo)}
-              >
-                Excluir
-              </button>
-              <br />
-            </Fragment>
+            todolistOrdered.map((todo) => {
+              return (
+                <Fragment key={todo.id}>
+                  <input
+                    type="checkbox"
+                    checked={todo.isCompleted}
+                    onChange={
+                      (event) => {
+                        const payload = {
+                          ...todo,
+                          isCompleted: event.target.checked,
+                        }
+                        changeTodo(todo, payload)
+                      }}
+                  />
+                  <TodoTextContext.Provider value={todo}>
+                    <TodoText />
+                  </TodoTextContext.Provider>
+                  <button
+                    type="button"
+                    onClick={() => onDelete(todo)}
+                  >
+                    Excluir
+                  </button>
+                  <br />
+                </Fragment>
+              )
+            })
           )
-        })
-      )
-    }}
-  </TodoListContext.Consumer>
+        }}
+      </TodoListContext.Consumer>
+    )}
+  </OrderConsumer>
 )
 
 export default TodoList

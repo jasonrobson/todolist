@@ -3,7 +3,8 @@ import _ from 'lodash'
 import TodoList, { TodoListContext } from './TodoList'
 import Filters, { FilterContext } from './Filters'
 import { FILTER_ALL } from './constants'
-import Orders, { OrderContext } from './Orders'
+import Orders from './Orders'
+import { OrderProvider } from './OrderContext'
 import Registerer, { RegistererContext } from './Registerer'
 
 const BottomToolbar = () => (
@@ -19,11 +20,6 @@ class App extends Component {
   constructor() {
     super()
 
-    this.changeOrders = (payload) => {
-      this.setState(() => ({
-        orderBy: payload,
-      }))
-    }
     this.changeTodo = (todo, payload) => {
       this.setState((prevState) => {
         const newTodoList = _.without(prevState.todolist, todo)
@@ -57,8 +53,6 @@ class App extends Component {
       maxId: 0,
       todolist: [],
       filterBy: FILTER_ALL,
-      orderBy: { completed: 'asc', name: 'asc' },
-      changeOrders: this.changeOrders,
       changeTodo: this.changeTodo,
       deleteTodo: this.deleteTodo,
       changeFilter: this.changeFilter,
@@ -68,27 +62,27 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <div style={{ paddingLeft: '50%' }}>
+      <OrderProvider>
+        <div>
+          <div style={{ paddingLeft: '50%' }}>
+            <br />
+            <br />
+            <RegistererContext.Provider value={this.state}>
+              <Registerer />
+            </RegistererContext.Provider>
+          </div>
           <br />
-          <br />
-          <RegistererContext.Provider value={this.state}>
-            <Registerer />
-          </RegistererContext.Provider>
-        </div>
-        <br />
-        <OrderContext.Provider value={this.state}>
           <Orders />
-        </OrderContext.Provider>
-        <br />
-        <TodoListContext.Provider value={this.state}>
-          <TodoList />
-        </TodoListContext.Provider>
-        <hr />
-        <FilterContext.Provider value={this.state}>
-          <BottomToolbar />
-        </FilterContext.Provider>
-      </div>
+          <br />
+          <TodoListContext.Provider value={this.state}>
+            <TodoList />
+          </TodoListContext.Provider>
+          <hr />
+          <FilterContext.Provider value={this.state}>
+            <BottomToolbar />
+          </FilterContext.Provider>
+        </div>
+      </OrderProvider>
     )
   }
 }

@@ -1,43 +1,21 @@
-import React, { Component, createContext, Fragment } from 'react'
+import React from 'react'
 
-export const invertOrder = order => (
-  order === 'asc' ? 'desc' : 'asc'
-)
+import Order from './Order'
 
-export const orders = [
-  { label: 'Ordenar por Completada', orderBy: 'completed' },
-  { label: 'Ordenar por Nome', orderBy: 'name' },
+export const options = [
+  { name: 'completed', label: 'Ordenar por Completada' },
+  { name: 'name', label: 'Ordenar por Nome' },
 ]
 
-export const OrderContext = createContext({
-  orderBy: { completed: 'asc', name: 'asc' },
-  changeOrders: () => {},
-})
-
-class Orders extends Component {
-  render() {
-    return orders.map(({ label, orderBy: orderByMap }) => (
-      <Fragment key={label}>
-        <OrderContext.Consumer>
-          { ({ orderBy: currentOrderBy, changeOrders }) => (
-            <button
-              type="button"
-              key={label}
-              onClick={() => {
-                const payload = {
-                  ...currentOrderBy,
-                  [orderByMap]: invertOrder(currentOrderBy[orderByMap]),
-                }
-                changeOrders(payload)
-              }}
-            >
-              { label }
-            </button>
-          )}
-        </OrderContext.Consumer>
-      </Fragment>
-    ))
-  }
-}
+const Orders = () => (
+  options.map(({ label, name }) => (
+    <Order
+      key={name}
+      name={name}
+    >
+      {label}
+    </Order>
+  ))
+)
 
 export default Orders
