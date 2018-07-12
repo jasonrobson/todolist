@@ -1,21 +1,16 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 import Order from './Order'
 
-export const options = [
-  { name: 'completed', label: 'Ordenar por Completada' },
-  { name: 'name', label: 'Ordenar por Nome' },
-]
-
 const Orders = () => (
-  options.map(({ label, name }) => (
-    <Order
-      key={name}
-      name={name}
-    >
-      {label}
+  <Fragment>
+    <Order name="completed">
+      Ordenar por Completada
     </Order>
-  ))
+    <Order name="name">
+      Ordenar por Nome
+    </Order>
+  </Fragment>
 )
 
 export default Orders
