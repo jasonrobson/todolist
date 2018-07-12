@@ -9,25 +9,26 @@ export const orders = [
   { label: 'Ordenar por Nome', orderBy: 'name' },
 ]
 
-export const OrderContext = createContext({ completed: 'asc', name: 'asc' })
+export const OrderContext = createContext({
+  orderBy: { completed: 'asc', name: 'asc' },
+  changeOrders: () => {},
+})
 
 class Orders extends Component {
   render() {
-    const { onChange } = this.props
-
-    return orders.map(({ label, orderBy }) => (
+    return orders.map(({ label, orderBy: orderByMap }) => (
       <Fragment key={label}>
         <OrderContext.Consumer>
-          {currentOrderBy => (
+          { ({ orderBy: currentOrderBy, changeOrders }) => (
             <button
               type="button"
               key={label}
               onClick={() => {
-                const newPayload = {
+                const payload = {
                   ...currentOrderBy,
-                  [orderBy]: invertOrder(currentOrderBy[orderBy]),
+                  [orderByMap]: invertOrder(currentOrderBy[orderByMap]),
                 }
-                onChange(newPayload)
+                changeOrders(payload)
               }}
             >
               { label }
