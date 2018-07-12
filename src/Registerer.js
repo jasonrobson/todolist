@@ -1,5 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, createContext } from 'react'
 
+export const RegistererContext = createContext({
+  maxId: 0,
+  changeRegisterer: () => {},
+})
 
 class Registerer extends Component {
   state = {
@@ -16,23 +20,26 @@ class Registerer extends Component {
 
   render() {
     const { fieldName } = this.state
-    const { onChange, maxId } = this.props
     return (
-      <input
-        onKeyDown={(event) => {
-          if (event.key === 'Enter' && event.target.value !== '') {
-            const newTodo = {
-              id: maxId + 1,
-              isCompleted: false,
-              name: event.target.value,
-            }
-            onChange(newTodo)
-            this.resetName()
-          }
-        }}
-        onChange={this.handleFieldNameChange}
-        value={fieldName}
-      />
+      <RegistererContext.Consumer>
+        {({ maxId, changeRegisterer }) => (
+          <input
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' && event.target.value !== '') {
+                const newTodo = {
+                  id: maxId + 1,
+                  isCompleted: false,
+                  name: event.target.value,
+                }
+                changeRegisterer(newTodo)
+                this.resetName()
+              }
+            }}
+            onChange={this.handleFieldNameChange}
+            value={fieldName}
+          />
+        )}
+      </RegistererContext.Consumer>
     )
   }
 }

@@ -4,7 +4,7 @@ import TodoList, { TodoListContext } from './TodoList'
 import Filters, { FilterContext } from './Filters'
 import { FILTER_ALL } from './constants'
 import Orders, { OrderContext } from './Orders'
-import Registerer from './Registerer'
+import Registerer, { RegistererContext } from './Registerer'
 
 const BottomToolbar = () => (
   <center>
@@ -24,14 +24,12 @@ class App extends Component {
         orderBy: payload,
       }))
     }
-
     this.changeTodo = (todo, payload) => {
       this.setState((prevState) => {
         const newTodoList = _.without(prevState.todolist, todo)
         return { todolist: [...newTodoList, _.cloneDeep(payload)] }
       })
     }
-
     this.deleteTodo = (payload) => {
       this.setState((prevState) => {
         return {
@@ -39,11 +37,18 @@ class App extends Component {
         }
       })
     }
-
     this.changeFilter = (payload) => {
       this.setState(() => {
         return {
           filterBy: payload,
+        }
+      })
+    }
+    this.changeRegisterer = (payload) => {
+      this.setState((prevState) => {
+        return {
+          todolist: [...prevState.todolist, payload],
+          maxId: prevState.maxId + 1,
         }
       })
     }
@@ -57,31 +62,19 @@ class App extends Component {
       changeTodo: this.changeTodo,
       deleteTodo: this.deleteTodo,
       changeFilter: this.changeFilter,
+      changeRegisterer: this.changeRegisterer,
     }
   }
 
   render() {
-    const {
-      maxId,
-    } = this.state
-
     return (
       <div>
         <div style={{ paddingLeft: '50%' }}>
           <br />
           <br />
-          <Registerer
-            maxId={maxId}
-            onChange={(todoItem) => {
-              this.setState((prevState) => {
-                return {
-                  todolist: [...prevState.todolist, todoItem],
-                  maxId: prevState.maxId + 1,
-                }
-              })
-            }
-          }
-          />
+          <RegistererContext.Provider value={this.state}>
+            <Registerer />
+          </RegistererContext.Provider>
         </div>
         <br />
         <OrderContext.Provider value={this.state}>
