@@ -5,8 +5,7 @@ import { OrderConsumer } from './OrderContext'
 const Order = ({ name, ...props }) => (
   <OrderConsumer>
     {({ invertOrder }) => (
-      <button
-        type="button"
+      <span
         onClick={() => invertOrder(name)}
         {...props}
       />

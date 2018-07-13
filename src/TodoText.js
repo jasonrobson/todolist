@@ -1,11 +1,8 @@
 import React, { Component, Fragment } from 'react'
 
-const getBackgroundColor = ({ typing, todo }) => {
+const getBackgroundColor = ({ typing }) => {
   if (typing) {
     return 'red'
-  }
-  if (todo.isCompleted) {
-    return 'lightgray'
   }
   return 'white'
 }
@@ -24,6 +21,7 @@ class TodoText extends Component {
         <span
           style={{
             visibility: editing ? 'hidden' : 'visible',
+            backgroundColor: todo.isCompleted ? 'lightgray' : 'white',
           }}
           onDoubleClick={() => {
             this.setState({ editing: true })
