@@ -3,8 +3,8 @@ import _ from 'lodash'
 import TodoText from './TodoText'
 import { toFilter } from './Filters'
 import { OrderConsumer } from './OrderContext'
-import { FilterConsumer } from './FilterContext';
-import { TodosConsumer } from './TodosContext';
+import { FilterConsumer } from './FilterContext'
+import { TodosConsumer } from './TodosContext'
 
 export const TodoListContext = createContext({
   todos: [],
@@ -33,11 +33,11 @@ const TodoCheck = ({ todo, changeTodo }) => (
 
 const TodoDelete = ({ todo, onDelete }) => (
   <button
+    id="close-CSS2"
     type="button"
     onClick={() => onDelete(todo)}
-  >
-    Excluir
-  </button>
+    style={{ width: 100, height: 100 }}
+  />
 )
 
 const TodoList = () => (
