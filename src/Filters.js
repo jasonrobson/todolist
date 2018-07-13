@@ -1,6 +1,8 @@
-import React, { Fragment, createContext } from 'react'
+import React from 'react'
 import _ from 'lodash'
 import { FILTER_ALL, FILTER_COMPLETED, FILTER_IN_PROGRESS } from './constants'
+import Filter from './Filter'
+import { FilterProvider } from './FilterContext'
 
 const filters = [
   { filterBy: FILTER_ALL, label: 'Todas' },
@@ -19,31 +21,10 @@ export const toFilter = (filterBy) => {
     : _.constant(true)
 }
 
-export const FilterContext = createContext({
-  filterBy: FILTER_ALL,
-  changeFilter: () => {},
-})
-
 const Filters = () => (
-  <FilterContext.Consumer>
-    {
-      ({ filterBy: currentFilter, changeFilter }) => {
-        return (
-          filters.map(({ filterBy, label }) => (
-            <Fragment key={filterBy}>
-              <button
-                key={filterBy}
-                type="button"
-                onClick={() => { changeFilter(filterBy) }}
-              >
-                {label}
-              </button>
-            </Fragment>
-          ))
-        )
-      }
-    }
-  </FilterContext.Consumer>
+  filters.map(({ filterBy, label }) => (
+    <Filter key={filterBy} filterBy={filterBy} label={label} />
+  ))
 )
 
 export default Filters

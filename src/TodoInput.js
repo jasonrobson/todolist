@@ -1,11 +1,7 @@
-import React, { Component, createContext } from 'react'
+import React, { Component } from 'react'
+import { TodosConsumer } from './TodosContext'
 
-export const RegistererContext = createContext({
-  maxId: 0,
-  changeRegisterer: () => {},
-})
-
-class Registerer extends Component {
+class TodoInput extends Component {
   state = {
     fieldName: '',
   }
@@ -21,8 +17,8 @@ class Registerer extends Component {
   render() {
     const { fieldName } = this.state
     return (
-      <RegistererContext.Consumer>
-        {({ maxId, changeRegisterer }) => (
+      <TodosConsumer>
+        {({ maxId, createTodo }) => (
           <input
             onKeyDown={(event) => {
               if (event.key === 'Enter' && event.target.value !== '') {
@@ -31,7 +27,7 @@ class Registerer extends Component {
                   isCompleted: false,
                   name: event.target.value,
                 }
-                changeRegisterer(newTodo)
+                createTodo(newTodo)
                 this.resetName()
               }
             }}
@@ -39,9 +35,9 @@ class Registerer extends Component {
             value={fieldName}
           />
         )}
-      </RegistererContext.Consumer>
+      </TodosConsumer>
     )
   }
 }
 
-export default Registerer
+export default TodoInput

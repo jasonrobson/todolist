@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import _ from 'lodash'
-import TodoList, { TodoListContext } from './TodoList'
-import Filters, { FilterContext } from './Filters'
-import { FILTER_ALL } from './constants'
+import React from 'react'
+import TodoList from './TodoList'
+import { TodosProvider } from './TodosContext'
+import Filters from './Filters'
+import { FilterProvider } from './FilterContext'
 import Orders from './Orders'
 import { OrderProvider } from './OrderContext'
-import Registerer, { RegistererContext } from './Registerer'
+import TodoInput from './TodoInput'
 
 const BottomToolbar = () => (
   <center>
@@ -16,75 +16,28 @@ const BottomToolbar = () => (
   </center>
 )
 
-class App extends Component {
-  constructor() {
-    super()
-
-    this.changeTodo = (todo, payload) => {
-      this.setState((prevState) => {
-        const newTodoList = _.without(prevState.todolist, todo)
-        return { todolist: [...newTodoList, _.cloneDeep(payload)] }
-      })
-    }
-    this.deleteTodo = (payload) => {
-      this.setState((prevState) => {
-        return {
-          todolist: _.without(prevState.todolist, payload),
-        }
-      })
-    }
-    this.changeFilter = (payload) => {
-      this.setState(() => {
-        return {
-          filterBy: payload,
-        }
-      })
-    }
-    this.changeRegisterer = (payload) => {
-      this.setState((prevState) => {
-        return {
-          todolist: [...prevState.todolist, payload],
-          maxId: prevState.maxId + 1,
-        }
-      })
-    }
-
-    this.state = {
-      maxId: 0,
-      todolist: [],
-      filterBy: FILTER_ALL,
-      changeTodo: this.changeTodo,
-      deleteTodo: this.deleteTodo,
-      changeFilter: this.changeFilter,
-      changeRegisterer: this.changeRegisterer,
-    }
-  }
-
-  render() {
-    return (
-      <OrderProvider>
-        <div>
-          <div style={{ paddingLeft: '50%' }}>
-            <br />
-            <br />
-            <RegistererContext.Provider value={this.state}>
-              <Registerer />
-            </RegistererContext.Provider>
-          </div>
+const App = () => (
+  <OrderProvider>
+    <FilterProvider>
+      <TodosProvider>
+        <center>
           <br />
           <Orders />
           <br />
-          <TodoListContext.Provider value={this.state}>
-            <TodoList />
-          </TodoListContext.Provider>
+          <TodoInput />
+          <br />
+          <br />
           <hr />
-          <FilterContext.Provider value={this.state}>
-            <BottomToolbar />
-          </FilterContext.Provider>
-        </div>
-      </OrderProvider>
-    )
-  }
-}
+          <br />
+          <TodoList />
+          <br />
+          <br />
+          <hr />
+          <BottomToolbar />
+        </center>
+      </TodosProvider>
+    </FilterProvider>
+  </OrderProvider>
+)
 
 export default App

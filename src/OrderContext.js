@@ -6,7 +6,7 @@ export const nextOrder = orderBy => (
 
 const Context = createContext({
   orders: {},
-  changeOrder: () => {},
+  invertOrder: () => {},
 })
 
 export class OrderProvider extends Component {
@@ -29,7 +29,7 @@ export class OrderProvider extends Component {
   render() {
     const value = {
       ...this.state,
-      changeOrder: this.changeOrder,
+      invertOrder: this.invertOrder,
     }
 
     return (
