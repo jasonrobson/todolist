@@ -1,8 +1,7 @@
 import React, { Fragment, createContext } from 'react'
 import _ from 'lodash'
-import TodoText, { TodoTextContext } from './TodoText'
-import Filters, { toFilter } from './Filters'
-
+import TodoText from './TodoText'
+import { toFilter } from './Filters'
 import { OrderConsumer } from './OrderContext'
 import { FilterConsumer } from './FilterContext';
 import { TodosConsumer } from './TodosContext';

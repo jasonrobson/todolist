@@ -2,7 +2,6 @@ import React from 'react'
 import _ from 'lodash'
 import { FILTER_ALL, FILTER_COMPLETED, FILTER_IN_PROGRESS } from './constants'
 import Filter from './Filter'
-import { FilterProvider } from './FilterContext'
 
 const filters = [
   { filterBy: FILTER_ALL, label: 'Todas' },

@@ -1,5 +1,5 @@
 import React, { Component, createContext } from 'react'
-import { FILTER_ALL } from './constants';
+import { FILTER_ALL } from './constants'
 
 const Context = createContext({
   filterBy: '',
