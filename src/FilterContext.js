@@ -25,7 +25,6 @@ export class FilterProvider extends Component {
       ...this.state,
       changeFilter: this.changeFilter,
     }
-    //console.log(this.state.filterBy)
     return (
       <Context.Provider value={value}>
         {this.props.children}

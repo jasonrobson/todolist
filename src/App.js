@@ -21,17 +21,10 @@ const App = () => (
     <FilterProvider>
       <TodosProvider>
         <center>
-          <br />
           <Orders />
-          <br />
           <TodoInput />
-          <br />
-          <br />
           <hr />
-          <br />
           <TodoList />
-          <br />
-          <br />
           <hr />
           <BottomToolbar />
         </center>
