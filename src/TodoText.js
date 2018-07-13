@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 
-const getBackgroundColor = ({ changing, todo }) => {
-  if (changing) {
+const getBackgroundColor = ({ typing, todo }) => {
+  if (typing) {
     return 'red'
   }
   if (todo.isCompleted) {
@@ -12,38 +12,54 @@ const getBackgroundColor = ({ changing, todo }) => {
 
 class TodoText extends Component {
   state = {
-    changing: false,
+    typing: false,
+    editing: false,
   }
 
   render() {
     const { changeTodo, todo } = this.props
+    const { editing } = this.state
     return (
-      <input
-        style={{
-          backgroundColor: getBackgroundColor({
-            ...this.state,
-            todo,
-          }),
-        }}
-        defaultValue={todo.name}
-        onKeyDown={(event) => {
-          const newName = event.target.value
-          if (event.key === 'Enter') {
-            const payload = {
-              ...todo,
-              name: newName,
+      <Fragment>
+        <span
+          style={{
+            visibility: editing ? 'hidden' : 'visible',
+          }}
+          onDoubleClick={() => {
+            this.setState({ editing: true })
+          }}
+        >
+          {todo.name}
+        </span>
+        <input
+          style={{
+            backgroundColor: getBackgroundColor({
+              ...this.state,
+              todo,
+            }),
+            visibility: editing ? 'visible' : 'hidden',
+          }}
+          defaultValue={todo.name}
+          onKeyDown={(event) => {
+            const newName = event.target.value
+            if (event.key === 'Enter') {
+              const payload = {
+                ...todo,
+                name: newName,
+              }
+              changeTodo(todo, payload)
+              this.setState({ typing: false })
+              this.setState({ editing: false })
             }
-            changeTodo(todo, payload)
-            this.setState({ changing: false })
-          }
-        }}
-        onKeyUp={(event) => {
-          const newName = event.target.value
-          this.setState({
-            changing: newName !== todo.name,
-          })
-        }}
-      />
+          }}
+          onKeyUp={(event) => {
+            const newName = event.target.value
+            this.setState({
+              typing: newName !== todo.name,
+            })
+          }}
+        />
+      </Fragment>
     )
   }
 }

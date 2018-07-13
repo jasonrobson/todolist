@@ -18,13 +18,11 @@ class TodoInput extends Component {
     const { fieldName } = this.state
     return (
       <TodosConsumer>
-        {({ maxId, createTodo }) => (
+        {({ createTodo }) => (
           <input
             onKeyDown={(event) => {
               if (event.key === 'Enter' && event.target.value !== '') {
                 const newTodo = {
-                  id: maxId + 1,
-                  isCompleted: false,
                   name: event.target.value,
                 }
                 createTodo(newTodo)

@@ -25,11 +25,18 @@ export class TodosProvider extends Component {
     })
   }
 
-  createTodo = (newTodo) => {
-    this.setState(state => ({
-      todolist: [...state.todolist, newTodo],
-      maxId: state.maxId + 1,
-    }))
+  createTodo = (todo) => {
+    this.setState((state) => {
+      const newTodo = {
+        isCompleted: false,
+        id: state.maxId + 1,
+        ...todo,
+      }
+      return {
+        todolist: [...state.todolist, newTodo],
+        maxId: state.maxId + 1,
+      }
+    })
   }
 
   deleteTodo = (payload) => {
