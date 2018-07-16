@@ -3,24 +3,20 @@ import React, { Fragment } from 'react'
 import Order from './Order'
 
 const Orders = () => (
-  <Fragment>
-    <table>
-      <tbody>
-        <tr>
-          <td>
-            <Order name="completed">
-              Ordenar por Completada
-            </Order>
-          </td>
-          <td>
-            <Order name="name">
-              Ordenar por Nome
-            </Order>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </Fragment>
+  <thead>
+    <tr>
+      <th>
+        <Order name="completed">
+          Ordenar por Completada
+        </Order>
+      </th>
+      <th>
+        <Order name="name">
+          Ordenar por Nome
+        </Order>
+      </th>
+    </tr>
+  </thead>
 )
 
 export default Orders

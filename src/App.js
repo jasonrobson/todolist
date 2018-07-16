@@ -23,9 +23,11 @@ const App = () => (
         <center>
           <TodoInput />
           <hr />
-          <TodoList />
+          <table>
+            <Orders />
+            <TodoList />
+          </table>
           <hr />
-          <Orders />
           <BottomToolbar />
         </center>
       </TodosProvider>

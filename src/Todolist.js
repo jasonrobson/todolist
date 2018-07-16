@@ -55,26 +55,24 @@ const TodoList = () => (
             }) => {
               const todolistFiltered = getFilteredTodos({ todolist, filterBy })
               const todolistOrdered = _.orderBy(todolistFiltered, ['isCompleted', 'name'], [orders.completed, orders.name])
+
               return (
                 todolistOrdered.map((todo) => {
                   return (
                     <Fragment key={todo.id}>
-                      <br />
-                      <table>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <TodoCheck todo={todo} changeTodo={changeTodo} />
-                            </td>
-                            <td>
-                              <TodoText changeTodo={changeTodo} todo={todo} />
-                            </td>
-                            <td>
-                              <TodoDelete todo={todo} onDelete={onDelete} />
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <TodoCheck todo={todo} changeTodo={changeTodo} />
+                          </td>
+                          <td>
+                            <TodoText changeTodo={changeTodo} todo={todo} />
+                          </td>
+                          <td>
+                            <TodoDelete todo={todo} onDelete={onDelete} />
+                          </td>
+                        </tr>
+                      </tbody>
                     </Fragment>
                   )
                 })
