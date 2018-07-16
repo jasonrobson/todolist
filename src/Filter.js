@@ -6,6 +6,7 @@ const Filter = ({ filterBy, label, ...props }) => (
   <FilterConsumer>
     {({ changeFilter }) => (
       <button
+        className="btn btn-outline-danger"
         key={filterBy}
         type="button"
         onClick={() => { changeFilter(filterBy) }}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import TodoList from './Todolist'
 import { TodosProvider } from './TodosContext'
 import Filters from './Filters'
@@ -6,21 +6,29 @@ import { FilterProvider } from './FilterContext'
 import Orders from './Orders'
 import { OrderProvider } from './OrderContext'
 import TodoInput from './TodoInput'
+import Main from './Main.css'
 
 const BottomToolbar = () => (
-  <center>
-    <h3>
+  <Fragment>
+    <h3 className="filterstitle">
       Filtrar por
     </h3>
     <Filters />
-  </center>
+  </Fragment>
+)
+
+const HeaderContent = () => (
+  <h1 className="todostitle">
+    Todos
+  </h1>
 )
 
 const App = () => (
   <OrderProvider>
     <FilterProvider>
       <TodosProvider>
-        <center>
+        <div className="todobox">
+          <HeaderContent />
           <TodoInput />
           <hr />
           <table>
@@ -29,7 +37,7 @@ const App = () => (
           </table>
           <hr />
           <BottomToolbar />
-        </center>
+        </div>
       </TodosProvider>
     </FilterProvider>
   </OrderProvider>

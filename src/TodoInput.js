@@ -20,6 +20,12 @@ class TodoInput extends Component {
       <TodosConsumer>
         {({ createTodo }) => (
           <input
+            className="todoinput"
+            placeholder="Write your task and press enter"
+            style={{
+              minWidth: '500px',
+              textAlign: 'center',
+            }}
             onKeyDown={(event) => {
               if (event.key === 'Enter' && event.target.value !== '') {
                 const newTodo = {

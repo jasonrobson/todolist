@@ -5,12 +5,12 @@ import Order from './Order'
 const Orders = () => (
   <thead>
     <tr>
-      <th>
+      <th style={{ width: '49%', textAlign: 'center' }}>
         <Order name="completed">
           Ordenar por Completada
         </Order>
       </th>
-      <th>
+      <th style={{ width: '49%', textAlign: 'center' }}>
         <Order name="name">
           Ordenar por Nome
         </Order>

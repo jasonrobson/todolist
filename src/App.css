@@ -26,9 +26,3 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-
-#close-image img {
-  display: block;
-  height: 130px;
-  width: 100px;
-}

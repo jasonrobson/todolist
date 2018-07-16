@@ -5,7 +5,8 @@ import { toFilter } from './Filters'
 import { OrderConsumer } from './OrderContext'
 import { FilterConsumer } from './FilterContext'
 import { TodosConsumer } from './TodosContext'
-
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Main from './Main.css'
 
 export const TodoListContext = createContext({
   todos: [],
@@ -18,25 +19,36 @@ const getFilteredTodos = ({ todolist, filterBy }) => (
 )
 
 const TodoCheck = ({ todo, changeTodo }) => (
-  <input
-    type="checkbox"
-    checked={todo.isCompleted}
-    onChange={
-      (event) => {
-        const payload = {
-          ...todo,
-          isCompleted: event.target.checked,
-        }
-        changeTodo(todo, payload)
-      }}
-  />
+  <div className="chiller_cb">
+    <input
+      id={todo.id}
+      type="checkbox"
+      checked={todo.isCompleted}
+      onChange={
+        (event) => {
+          const payload = {
+            ...todo,
+            isCompleted: event.target.checked,
+          }
+          changeTodo(todo, payload)
+        }}
+    />
+    <label htmlFor={todo.id}>{todo.isCompleted ? 'done' : 'to do'}</label>
+    <span></span>
+  </div>
 )
 
 const TodoDelete = ({ todo, onDelete }) => (
   <button
     type="button"
     onClick={() => onDelete(todo)}
-    style={{ width: 40, height: 25 }}
+    style={{
+      width: 60,
+      height: 35,
+      backgroundColor: 'Transparent',
+      backgroundRepeat: 'no-repeat',
+      border: 'none',
+    }}
   >
     <img src={require("./delete.png")} style={{ width: 15, height: 15 }} alt="" />
   </button>

@@ -21,6 +21,7 @@ class TodoText extends Component {
         <span
           style={{
             visibility: editing ? 'hidden' : 'visible',
+            position: editing ? 'absolute' : 'relative',
             backgroundColor: todo.isCompleted ? 'lightgray' : 'white',
           }}
           onDoubleClick={() => {
@@ -36,6 +37,8 @@ class TodoText extends Component {
               todo,
             }),
             visibility: editing ? 'visible' : 'hidden',
+            position: editing ? 'relative' : 'absolute',
+            width: '200px',
           }}
           defaultValue={todo.name}
           onKeyDown={(event) => {
