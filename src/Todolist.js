@@ -60,9 +60,21 @@ const TodoList = () => (
                   return (
                     <Fragment key={todo.id}>
                       <br />
-                      <TodoCheck todo={todo} changeTodo={changeTodo} />
-                      <TodoText changeTodo={changeTodo} todo={todo} />
-                      <TodoDelete todo={todo} onDelete={onDelete} />
+                      <table>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <TodoCheck todo={todo} changeTodo={changeTodo} />
+                            </td>
+                            <td>
+                              <TodoText changeTodo={changeTodo} todo={todo} />
+                            </td>
+                            <td>
+                              <TodoDelete todo={todo} onDelete={onDelete} />
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </Fragment>
                   )
                 })
