@@ -6,6 +6,7 @@ import { OrderConsumer } from './OrderContext'
 import { FilterConsumer } from './FilterContext'
 import { TodosConsumer } from './TodosContext'
 
+
 export const TodoListContext = createContext({
   todos: [],
   changeTodo: () => {},
@@ -33,11 +34,12 @@ const TodoCheck = ({ todo, changeTodo }) => (
 
 const TodoDelete = ({ todo, onDelete }) => (
   <button
-    id="close-CSS2"
     type="button"
     onClick={() => onDelete(todo)}
     style={{ width: 100, height: 100 }}
-  />
+  >
+    <img src={require("./delete.png")} style={{ width: 50, height: 50 }} alt="" />
+  </button>
 )
 
 const TodoList = () => (
