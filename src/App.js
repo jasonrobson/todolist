@@ -21,11 +21,11 @@ const App = () => (
     <FilterProvider>
       <TodosProvider>
         <center>
-          <Orders />
           <TodoInput />
           <hr />
           <TodoList />
           <hr />
+          <Orders />
           <BottomToolbar />
         </center>
       </TodosProvider>

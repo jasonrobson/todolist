@@ -36,9 +36,9 @@ const TodoDelete = ({ todo, onDelete }) => (
   <button
     type="button"
     onClick={() => onDelete(todo)}
-    style={{ width: 100, height: 100 }}
+    style={{ width: 40, height: 25 }}
   >
-    <img src={require("./delete.png")} style={{ width: 50, height: 50 }} alt="" />
+    <img src={require("./delete.png")} style={{ width: 15, height: 15 }} alt="" />
   </button>
 )
 
