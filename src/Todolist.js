@@ -1,5 +1,6 @@
-import React, { createContext } from 'react'
+import React from 'react'
 import { Button, ButtonGroup } from 'reactstrap'
+import { Compose } from 'react-powerplug'
 import _ from 'lodash'
 import TodoText from './TodoText'
 import Order from './Order'
@@ -7,12 +8,6 @@ import Filters, { toFilter } from './Filters'
 import { OrderConsumer } from './OrderContext'
 import { FilterConsumer } from './FilterContext'
 import { TodosConsumer } from './TodosContext'
-
-export const TodoListContext = createContext({
-  todos: [],
-  changeTodo: () => {},
-  deleteTodo: () => {},
-})
 
 const getFilteredTodos = ({ todolist, filterBy }) => (
   todolist.filter(toFilter(filterBy))
@@ -104,31 +99,22 @@ const TodoTable = ({ todos }) => (
 )
 
 const TodoList = () => (
-  <OrderConsumer>
-    {({ orders }) => (
-      <FilterConsumer>
-        {({ filterBy }) => (
-          <TodosConsumer>
-            {({
-              todolist,
-            }) => {
-              const todolistFiltered = getFilteredTodos({ todolist, filterBy })
-              const todolistOrdered = _.orderBy(todolistFiltered, ['isCompleted', 'name'], [orders.completed, orders.name])
-              return (
-                todolist.length > 0 ? (
-                  <div>
-                    <hr />
-                    <TodoTable todos={todolistOrdered} />
-                    <Filters />
-                  </div>
-                ) : null
-              )
-            }}
-          </TodosConsumer>
-        )}
-      </FilterConsumer>
-    )}
-  </OrderConsumer>
+  <Compose components={[OrderConsumer, FilterConsumer, TodosConsumer]}>
+    {({ orders }, { filterBy }, { todolist }) => {
+      const todolistFiltered = getFilteredTodos({ todolist, filterBy })
+      const todolistOrdered = _.orderBy(todolistFiltered, ['isCompleted', 'name'], [orders.completed, orders.name])
+
+      return (
+        todolist.length > 0 ? (
+          <div>
+            <hr />
+            <TodoTable todos={todolistOrdered} />
+            <Filters />
+          </div>
+        ) : null
+      )
+    }}
+  </Compose>
 )
 
 export default TodoList
