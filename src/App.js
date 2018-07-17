@@ -1,11 +1,10 @@
 import React from 'react'
 import TodoList from './Todolist'
 import { TodosProvider } from './TodosContext'
-import Filters from './Filters'
 import { FilterProvider } from './FilterContext'
 import { OrderProvider } from './OrderContext'
 import TodoInput from './TodoInput'
-import Main from './Main.css'
+import './Main.css'
 
 const HeaderContent = () => (
   <h1 className="todostitle">
@@ -21,7 +20,6 @@ const App = () => (
           <HeaderContent />
           <TodoInput />
           <TodoList />
-          <Filters />
         </div>
       </TodosProvider>
     </FilterProvider>

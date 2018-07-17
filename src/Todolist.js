@@ -1,13 +1,12 @@
-import React, { Fragment, createContext } from 'react'
+import React, { createContext } from 'react'
 import { Button, ButtonGroup } from 'reactstrap'
 import _ from 'lodash'
 import TodoText from './TodoText'
 import Order from './Order'
-import { toFilter } from './Filters'
+import Filters, { toFilter } from './Filters'
 import { OrderConsumer } from './OrderContext'
 import { FilterConsumer } from './FilterContext'
 import { TodosConsumer } from './TodosContext'
-import Main from './Main.css'
 
 export const TodoListContext = createContext({
   todos: [],
@@ -120,8 +119,9 @@ const TodoList = () => (
                   <div>
                     <hr />
                     <TodoTable todos={todolistOrdered} />
+                    <Filters />
                   </div>
-                ) : ''
+                ) : null
               )
             }}
           </TodosConsumer>
