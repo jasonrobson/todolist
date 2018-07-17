@@ -1,11 +1,12 @@
 import React, { Fragment, createContext } from 'react'
+import { Button, ButtonGroup } from 'reactstrap'
 import _ from 'lodash'
 import TodoText from './TodoText'
+import Order from './Order'
 import { toFilter } from './Filters'
 import { OrderConsumer } from './OrderContext'
 import { FilterConsumer } from './FilterContext'
 import { TodosConsumer } from './TodosContext'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import Main from './Main.css'
 
 export const TodoListContext = createContext({
@@ -19,23 +20,24 @@ const getFilteredTodos = ({ todolist, filterBy }) => (
 )
 
 const TodoCheck = ({ todo, changeTodo }) => (
-  <div className="chiller_cb">
-    <input
+  <ButtonGroup>
+    <Button
+      color={todo.isCompleted ? "secondary" : "primary"}
       id={todo.id}
-      type="checkbox"
-      checked={todo.isCompleted}
-      onChange={
-        (event) => {
+      active={todo.isCompleted}
+      style={{ width: 35, height: 35, color: 'white' }}
+      onClick={
+        () => {
           const payload = {
             ...todo,
-            isCompleted: event.target.checked,
+            isCompleted: !todo.isCompleted,
           }
           changeTodo(todo, payload)
         }}
-    />
-    <label htmlFor={todo.id}>{todo.isCompleted ? 'done' : 'to do'}</label>
-    <span></span>
-  </div>
+    >
+      {todo.isCompleted ? '✔' : ''}
+    </Button>
+  </ButtonGroup>
 )
 
 const TodoDelete = ({ todo, onDelete }) => (
@@ -69,25 +71,50 @@ const TodoList = () => (
               const todolistOrdered = _.orderBy(todolistFiltered, ['isCompleted', 'name'], [orders.completed, orders.name])
 
               return (
-                todolistOrdered.map((todo) => {
-                  return (
-                    <Fragment key={todo.id}>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <TodoCheck todo={todo} changeTodo={changeTodo} />
-                          </td>
-                          <td>
-                            <TodoText changeTodo={changeTodo} todo={todo} />
-                          </td>
-                          <td>
-                            <TodoDelete todo={todo} onDelete={onDelete} />
-                          </td>
-                        </tr>
-                      </tbody>
-                    </Fragment>
-                  )
-                })
+                <Fragment>
+                  {
+                    todolist.length > 0 ? (
+                      <div>
+                        <hr />
+                        <table>
+                          <thead>
+                            <tr>
+                              <th style={{ width: '49%', textAlign: 'center' }}>
+                                <Order name="completed">
+                                  Completada
+                                </Order>
+                              </th>
+                              <th style={{ width: '49%', textAlign: 'center' }}>
+                                <Order name="name">
+                                  Nome
+                                </Order>
+                              </th>
+                            </tr>
+                          </thead>
+                          {todolistOrdered.map((todo) => {
+                            return (
+                              <Fragment key={todo.id}>
+                                <tbody>
+                                  <tr>
+                                    <td>
+                                      <TodoCheck todo={todo} changeTodo={changeTodo} />
+                                    </td>
+                                    <td>
+                                      <TodoText changeTodo={changeTodo} todo={todo} />
+                                    </td>
+                                    <td>
+                                      <TodoDelete todo={todo} onDelete={onDelete} />
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </Fragment>
+                            )
+                          })}
+                        </table>
+                      </div>
+                    ) : ''
+                  }
+                </Fragment>
               )
             }}
           </TodosConsumer>

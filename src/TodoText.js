@@ -22,7 +22,8 @@ class TodoText extends Component {
           style={{
             visibility: editing ? 'hidden' : 'visible',
             position: editing ? 'absolute' : 'relative',
-            backgroundColor: todo.isCompleted ? 'lightgray' : 'white',
+            backgroundColor: todo.isCompleted ? 'gray' : '',
+            textDecoration: todo.isCompleted ? 'line-through' : '',
           }}
           onDoubleClick={() => {
             this.setState({ editing: true })

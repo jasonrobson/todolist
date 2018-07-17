@@ -9,7 +9,8 @@
     "popper.js": "^1.14.3",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "reactstrap": "^6.3.0"
   },
   "scripts": {
     "commitmsg": "commitlint -E GIT_PARAMS",
