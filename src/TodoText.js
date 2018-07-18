@@ -1,75 +1,86 @@
-import React, { Component, Fragment } from 'react'
+import React from 'react'
 import { TodosConsumer } from './TodosContext'
+import { TodoConsumer, TodoProvider } from './TodoContext'
 
-const getBackgroundColor = ({ typing }) => {
+const getBackgroundColor = (typing) => {
   if (typing) {
     return 'red'
   }
   return 'white'
 }
 
-class TodoText extends Component {
-  state = {
-    typing: false,
-    editing: false,
-  }
+const TodoTextSpan = ({ todo }) => (
+  <TodoConsumer>
+    {({
+      editing,
+      onChangeEditing,
+    }) => (
+      <span
+        style={{
+          visibility: editing ? 'hidden' : 'visible',
+          position: editing ? 'absolute' : 'relative',
+          backgroundColor: todo.isCompleted ? 'gray' : '',
+          textDecoration: todo.isCompleted ? 'line-through' : '',
+        }}
+        onDoubleClick={() => { onChangeEditing() }}
+      >
+        {todo.name}
+      </span>
+    )}
+  </TodoConsumer>
+)
 
-  render() {
-    const { todo } = this.props
-    const { editing } = this.state
-    return (
-      <TodosConsumer>
+const TodoTextInput = ({ todo }) => (
+  <TodosConsumer>
+    {({
+      changeTodo,
+    }) => (
+      <TodoConsumer>
         {({
-          changeTodo,
+          editing,
+          typing,
+          onChangeTyping,
+          resetProps,
         }) => (
-          <Fragment>
-            <span
-              style={{
-                visibility: editing ? 'hidden' : 'visible',
-                position: editing ? 'absolute' : 'relative',
-                backgroundColor: todo.isCompleted ? 'gray' : '',
-                textDecoration: todo.isCompleted ? 'line-through' : '',
-              }}
-              onDoubleClick={() => {
-                this.setState({ editing: true })
-              }}
-            >
-              {todo.name}
-            </span>
-            <input
-              style={{
-                backgroundColor: getBackgroundColor({
-                  ...this.state,
-                  todo,
-                }),
-                visibility: editing ? 'visible' : 'hidden',
-                position: editing ? 'relative' : 'absolute',
-                width: '200px',
-              }}
-              defaultValue={todo.name}
-              onKeyDown={(event) => {
-                const newName = event.target.value
-                if (event.key === 'Enter') {
-                  const payload = {
-                    ...todo,
-                    name: newName,
-                  }
-                  changeTodo(todo, payload)
-                  this.setState({ typing: false, editing: false })
+          <input
+            style={{
+              backgroundColor: getBackgroundColor(typing),
+              visibility: editing ? 'visible' : 'hidden',
+              position: editing ? 'relative' : 'absolute',
+              width: '200px',
+            }}
+            defaultValue={todo.name}
+            onKeyDown={(event) => {
+              const newName = event.target.value
+              if (event.key === 'Enter') {
+                const payload = {
+                  ...todo,
+                  name: newName,
                 }
-              }}
-              onKeyUp={(event) => {
-                const newName = event.target.value
-                this.setState({
-                  typing: newName !== todo.name,
-                })
-              }}
-            />
-          </Fragment>
+                changeTodo(todo, payload)
+                resetProps()
+              }
+            }}
+            onKeyUp={(event) => {
+              const newName = event.target.value
+              onChangeTyping(newName !== todo.name)
+            }}
+          />
         )}
-      </TodosConsumer>
-    )
-  }
-}
+      </TodoConsumer>
+    )}
+  </TodosConsumer>
+)
+
+const TodoText = props => (
+  <TodoProvider>
+    <TodoTextSpan
+      todo={props.todo}
+    />
+    <TodoTextInput
+      todo={props.todo}
+    />
+  </TodoProvider>
+)
 
 export default TodoText
