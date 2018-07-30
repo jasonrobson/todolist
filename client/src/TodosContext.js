@@ -18,6 +18,39 @@ export class TodosProvider extends Component {
     createTodo: this.createTodo,
   }
 
+  componentDidMount() {
+    // const myInit = {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   mode: 'cors',
+    //   credentials: 'omit',
+    //   cache: 'default',
+    // }
+    //const myRequest = new Request('http://localhost:3000/api/v1/todo_items', myInit)
+    fetch('http://localhost:3000/api/v1/todo_items')
+      .then(response => response.json())
+      .then((data) => {
+        // create an array of todos only with relevant data
+        const todos = data.data.map((c) => {
+          return {
+            id: c.id,
+            name: c.name,
+            isCompleted: c.completed,
+          }
+        })
+        // create a new "State" object without mutating
+        // the original State object.
+        const newState = Object.assign({}, this.state, {
+          todolist: todos,
+        })
+        // store the new state object in the component's state
+        this.setState(newState)
+      })
+      .catch(error => console.log(error))
+  }
+
   changeTodo = (todo, payload) => {
     this.setState((prevState) => {
       const newTodoList = _.without(prevState.todolist, todo)
@@ -40,6 +73,16 @@ export class TodosProvider extends Component {
   }
 
   deleteTodo = (payload) => {
+    // const myInit = {
+    //   method: 'DELETE',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   mode: 'cors',
+    //   credentials: 'omit',
+    //   cache: 'default',
+    // }
+    //const myRequest = new Request("http://localhost:3000/api/v1/todo_items/#{payload.id}", myInit)
     this.setState((prevState) => {
       return {
         todolist: _.without(prevState.todolist, payload),
