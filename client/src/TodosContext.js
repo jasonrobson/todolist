@@ -1,6 +1,6 @@
 import React, { Component, createContext } from 'react'
 import _ from 'lodash'
-import { getAllTodos, removeTodo } from './ApiRequests'
+import { getAllTodos, removeTodo, insertTodo } from './ApiRequests'
 
 export const Context = createContext({
   todolist: [],
@@ -23,8 +23,8 @@ export class TodosProvider extends Component {
 
   initializeTodos = () => (
     getAllTodos()
-      .then((data) => {
-        const todos = data.data.map((c) => {
+      .then((result) => {
+        const todos = result.map((c) => {
           return {
             id: c.id,
             name: c.name,
@@ -47,17 +47,20 @@ export class TodosProvider extends Component {
   }
 
   createTodo = (todo) => {
-    this.setState((state) => {
-      const newTodo = {
-        isCompleted: false,
-        id: state.maxId + 1,
-        ...todo,
-      }
-      return {
-        todolist: [...state.todolist, newTodo],
-        maxId: state.maxId + 1,
-      }
-    })
+    let newTodo = {
+      ...todo,
+      completed: false,
+    }
+    insertTodo(newTodo)
+      .then((result) => {
+        newTodo = Object.assign({}, result.data)
+        this.setState((state) => {
+          return {
+            todolist: [...state.todolist, newTodo],
+          }
+        })
+      })
+      .catch(error => console.log(error))
   }
 
   deleteTodo = (payload) => {

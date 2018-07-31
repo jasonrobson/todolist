@@ -4,7 +4,7 @@ module Api
       #listar todos os todos
       def index
         todos = TodoItem.order('created_at DESC');
-        render json: {status: 'SUCCESS', message:'Todos carregados', data:todos},status: :ok
+        render json: todos,status: :ok
       end
       def show
         todo = TodoItem.find(params[:id])
