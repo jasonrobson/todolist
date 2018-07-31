@@ -1,6 +1,6 @@
 import React, { Component, createContext } from 'react'
 import _ from 'lodash'
-import { getAllTodos } from './ApiRequests'
+import { getAllTodos, removeTodo } from './ApiRequests'
 
 export const Context = createContext({
   todolist: [],
@@ -61,18 +61,7 @@ export class TodosProvider extends Component {
   }
 
   deleteTodo = (payload) => {
-    const myInit = {
-      method: 'delete',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-    fetch("http://localhost:3000/api/v1/todo_items/"+payload.id, myInit)
-      .then((response) => {
-        if (response.status >= 400) {
-          throw new Error(response.statusText)
-        }
-      })
+    removeTodo(payload)
       .then(() => {
         this.setState((prevState) => {
           return {
