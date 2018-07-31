@@ -1,6 +1,6 @@
 import React from 'react'
 import TodoList from './Todolist'
-import { TodosProvider } from './TodosContext'
+import { TodosProvider, TodosConsumer } from './TodosContext'
 import { FilterProvider } from './FilterContext'
 import { OrderProvider } from './OrderContext'
 import TodoInput from './TodoInput'
@@ -19,7 +19,11 @@ const App = () => (
         <div className="todobox">
           <HeaderContent />
           <TodoInput />
-          <TodoList />
+          <TodosConsumer>
+            {({ initializeTodos }) => (
+              <TodoList initializeTodos={initializeTodos} />
+            )}
+          </TodosConsumer>
         </div>
       </TodosProvider>
     </FilterProvider>

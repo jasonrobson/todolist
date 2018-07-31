@@ -22,6 +22,9 @@ module Api
         todo = TodoItem.find(params[:id])
         todo.destroy
         render json: {status: 'SUCCESS', message: 'Todo deletado', data:todo}, status: :ok
+      rescue e
+        debugger
+        render :nothing, status: :unprocessable_entity
       end
       def update
         todo = TodoItem.find(params[:id])
