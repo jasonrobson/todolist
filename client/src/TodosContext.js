@@ -24,7 +24,6 @@ export class TodosProvider extends Component {
   initializeTodos = () => (
     getAllTodos()
       .then((data) => {
-        // create an array of todos only with relevant data
         const todos = data.data.map((c) => {
           return {
             id: c.id,
@@ -32,18 +31,12 @@ export class TodosProvider extends Component {
             isCompleted: c.completed,
           }
         })
-        // create a new "State" object without mutating
-        // the original State object.
         const newState = Object.assign({}, this.state, {
           todolist: todos,
         })
-        // store the new state object in the component's state
         this.setState(newState)
       })
       .catch(error => console.log(error))
-    // this.setState(() => (
-    //   { todolist: [...todos] }
-    // ))
   )
 
   changeTodo = (todo, payload) => {

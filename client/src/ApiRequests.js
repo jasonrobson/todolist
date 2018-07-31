@@ -1,4 +1,3 @@
-
 // export const createNewProfile = (profile) => {
 //   const formData = new FormData()
 //   formData.append('first_name', profile.firstName)
@@ -16,9 +15,3 @@ export const getAllTodos = () => {
   return fetch('http://localhost:3000/api/v1/todo_items')
     .then(response => response.json())
 }
-// USE CASE
-// createNewProfile(profile)
-//  .then((json) => {
-//      // handle success
-//   })
-//  .catch(error => error);
