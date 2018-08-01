@@ -1,6 +1,6 @@
 import React, { Component, createContext } from 'react'
 import _ from 'lodash'
-import { getAllTodos, removeTodo, insertTodo, updateTodo } from './ApiRequests'
+import { makeRequest } from './ApiRequests'
 
 export const Context = createContext({
   todolist: [],
@@ -19,64 +19,70 @@ export class TodosProvider extends Component {
     initializeTodos: this.initializeTodos,
   }
 
-  initializeTodos = () => (
-    getAllTodos()
-      .then((result) => {
-        const todos = result.map((c) => {
-          return {
-            id: c.id,
-            name: c.name,
-            completed: c.completed,
-          }
-        })
-        const newState = Object.assign({}, this.state, {
-          todolist: todos,
-        })
-        this.setState(newState)
+  initializeTodos = async () => {
+    try {
+      this.result = await makeRequest({ method: 'get', todo: null })
+      this.todos = this.result.map((c) => {
+        return {
+          id: c.id,
+          name: c.name,
+          completed: c.completed,
+        }
       })
-      .catch(error => console.log(error))
-  )
-
-  changeTodo = (payload, todo) => {
-    updateTodo(payload)
-      .then((result) => {
-        this.setState((prevState) => {
-          this.todo = { id: result.id, name: result.name, completed: result.completed }
-          const newTodoList = _.without(prevState.todolist, todo)
-          return { todolist: [...newTodoList, _.cloneDeep(this.todo)] }
-        })
+      const newState = Object.assign({}, this.state, {
+        todolist: this.todos,
       })
-      .catch(error => console.log(error))
+      this.setState(newState)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  createTodo = (todo) => {
-    insertTodo(
-      {
-        ...todo,
-        completed: false,
-      },
-    )
-      .then((result) => {
-        this.todo = { id: result.id, name: result.name, completed: result.completed }
-        this.setState((state) => {
-          return {
-            todolist: [...state.todolist, this.todo],
-          }
-        })
+  changeTodo = async (payload, todo) => {
+    try {
+      this.result = await makeRequest({ method: 'put', todo: payload })
+      this.setState((prevState) => {
+        this.todo = { id: this.result.id, name: this.result.name, completed: this.result.completed }
+        const newTodoList = _.without(prevState.todolist, todo)
+        return { todolist: [...newTodoList, _.cloneDeep(this.todo)] }
       })
-      .catch(error => console.log(error))
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  deleteTodo = (payload) => {
-    removeTodo(payload)
-      .then(() => {
-        this.setState((prevState) => {
-          return {
-            todolist: _.without(prevState.todolist, payload),
-          }
-        })
+  createTodo = async (todo) => {
+    try {
+      this.result = await makeRequest({
+        method: 'post',
+        todo:
+        {
+          ...todo,
+          completed: false,
+        },
       })
-      .catch(error => console.log(error))
+      this.todo = { id: this.result.id, name: this.result.name, completed: this.result.completed }
+      this.setState((state) => {
+        return {
+          todolist: [...state.todolist, this.todo],
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  deleteTodo = async (payload) => {
+    try {
+      makeRequest({ method: 'delete', todo: payload })
+      this.setState((prevState) => {
+        return {
+          todolist: _.without(prevState.todolist, payload),
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   render() {
