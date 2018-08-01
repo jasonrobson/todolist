@@ -1,3 +1,10 @@
+export const treatBadResponse = (response) => {
+  if (response.status >= 400) {
+    throw new Error(response.statusText)
+  }
+  return response.json()
+}
+
 export const insertTodo = (todo) => {
   return fetch('http://localhost:3000/api/v1/todo_items', {
     method: 'POST',
@@ -8,24 +15,16 @@ export const insertTodo = (todo) => {
     body: JSON.stringify(todo),
   })
     .then((response) => {
-      if (response.status >= 400) {
-        throw new Error(response.statusText)
-      }
-      return response.json()
+      return treatBadResponse(response)
     })
-    .then(result => result)
 }
 
 
 export const getAllTodos = () => {
   return fetch('http://localhost:3000/api/v1/todo_items')
     .then((response) => {
-      if (response.status >= 400) {
-        throw new Error(response.statusText)
-      }
-      return response.json()
+      return treatBadResponse(response)
     })
-    .then(result => result)
 }
 
 export const removeTodo = (payload) => {
@@ -37,9 +36,6 @@ export const removeTodo = (payload) => {
   }
   return fetch("http://localhost:3000/api/v1/todo_items/"+payload.id, myInit)
     .then((response) => {
-      if (response.status >= 400) {
-        throw new Error(response.statusText)
-      }
-      return response.json()
+      return treatBadResponse(response)
     })
 }

@@ -53,7 +53,7 @@ export class TodosProvider extends Component {
     }
     insertTodo(newTodo)
       .then((result) => {
-        newTodo = Object.assign({}, result.data)
+        newTodo = Object.assign({}, result)
         this.setState((state) => {
           return {
             todolist: [...state.todolist, newTodo],
