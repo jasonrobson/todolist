@@ -19,7 +19,6 @@ export const insertTodo = (todo) => {
     })
 }
 
-
 export const getAllTodos = () => {
   return fetch('http://localhost:3000/api/v1/todo_items')
     .then((response) => {
@@ -27,14 +26,28 @@ export const getAllTodos = () => {
     })
 }
 
-export const removeTodo = (payload) => {
+export const removeTodo = (todo) => {
   const myInit = {
     method: 'delete',
     headers: {
       'Content-Type': 'application/json',
     },
   }
-  return fetch("http://localhost:3000/api/v1/todo_items/"+payload.id, myInit)
+  return fetch("http://localhost:3000/api/v1/todo_items/"+todo.id, myInit)
+    .then((response) => {
+      return treatBadResponse(response)
+    })
+}
+
+export const updateTodo = (todo) => {
+  const myInit = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(todo),
+  }
+  return fetch("http://localhost:3000/api/v1/todo_items/"+todo.id, myInit)
     .then((response) => {
       return treatBadResponse(response)
     })

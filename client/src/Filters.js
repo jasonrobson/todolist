@@ -11,8 +11,8 @@ const filters = [
 
 export const toFilter = (filterBy) => {
   const mapping = {
-    [FILTER_COMPLETED]: { isCompleted: true },
-    [FILTER_IN_PROGRESS]: { isCompleted: false },
+    [FILTER_COMPLETED]: { completed: true },
+    [FILTER_IN_PROGRESS]: { completed: false },
   }
   const predicate = mapping[filterBy]
   return predicate

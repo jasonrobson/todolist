@@ -19,8 +19,8 @@ const TodoTextSpan = ({ todo }) => (
         style={{
           visibility: editing ? 'hidden' : 'visible',
           position: editing ? 'absolute' : 'relative',
-          backgroundColor: todo.isCompleted ? 'gray' : '',
-          textDecoration: todo.isCompleted ? 'line-through' : '',
+          backgroundColor: todo.completed ? 'gray' : '',
+          textDecoration: todo.completed ? 'line-through' : '',
         }}
         onDoubleClick={() => { onChangeEditing() }}
       >
@@ -57,7 +57,7 @@ const TodoTextInput = ({ todo }) => (
                   ...todo,
                   name: newName,
                 }
-                changeTodo(todo, payload)
+                changeTodo(payload, todo)
                 resetProps()
               }
             }}

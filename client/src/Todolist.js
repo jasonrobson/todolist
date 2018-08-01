@@ -22,7 +22,7 @@ class TodoList extends Component {
       <Compose components={[OrderConsumer, FilterConsumer, TodosConsumer]}>
         {({ orders }, { filterBy }, { todolist }) => {
           const todolistFiltered = getFilteredTodos({ todolist, filterBy })
-          const todolistOrdered = _.orderBy(todolistFiltered, ['isCompleted', 'name'], [orders.completed, orders.name])
+          const todolistOrdered = _.orderBy(todolistFiltered, ['completed', 'name'], [orders.completed, orders.name])
 
           return (
             todolist.length > 0 ? (

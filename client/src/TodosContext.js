@@ -1,10 +1,9 @@
 import React, { Component, createContext } from 'react'
 import _ from 'lodash'
-import { getAllTodos, removeTodo, insertTodo } from './ApiRequests'
+import { getAllTodos, removeTodo, insertTodo, updateTodo } from './ApiRequests'
 
 export const Context = createContext({
   todolist: [],
-  maxId: 0,
   changeTodo: () => {},
   deleteTodo: () => {},
   createTodo: () => {},
@@ -14,7 +13,6 @@ export const Context = createContext({
 export class TodosProvider extends Component {
   state = {
     todolist: [],
-    maxId: 0,
     changeTodo: this.changeTodo,
     deleteTodo: this.deleteTodo,
     createTodo: this.createTodo,
@@ -28,7 +26,7 @@ export class TodosProvider extends Component {
           return {
             id: c.id,
             name: c.name,
-            isCompleted: c.completed,
+            completed: c.completed,
           }
         })
         const newState = Object.assign({}, this.state, {
@@ -39,24 +37,30 @@ export class TodosProvider extends Component {
       .catch(error => console.log(error))
   )
 
-  changeTodo = (todo, payload) => {
-    this.setState((prevState) => {
-      const newTodoList = _.without(prevState.todolist, todo)
-      return { todolist: [...newTodoList, _.cloneDeep(payload)] }
-    })
+  changeTodo = (payload, todo) => {
+    updateTodo(payload)
+      .then((result) => {
+        this.setState((prevState) => {
+          this.todo = { id: result.id, name: result.name, completed: result.completed }
+          const newTodoList = _.without(prevState.todolist, todo)
+          return { todolist: [...newTodoList, _.cloneDeep(this.todo)] }
+        })
+      })
+      .catch(error => console.log(error))
   }
 
   createTodo = (todo) => {
-    let newTodo = {
-      ...todo,
-      completed: false,
-    }
-    insertTodo(newTodo)
+    insertTodo(
+      {
+        ...todo,
+        completed: false,
+      },
+    )
       .then((result) => {
-        newTodo = Object.assign({}, result)
+        this.todo = { id: result.id, name: result.name, completed: result.completed }
         this.setState((state) => {
           return {
-            todolist: [...state.todolist, newTodo],
+            todolist: [...state.todolist, this.todo],
           }
         })
       })

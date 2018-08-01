@@ -9,20 +9,20 @@ const TodoCheck = ({ todo }) => (
     }) => (
       <ButtonGroup>
         <Button
-          color={todo.isCompleted ? "secondary" : "primary"}
+          color={todo.completed ? "secondary" : "primary"}
           id={todo.id}
-          active={todo.isCompleted}
+          active={todo.completed}
           style={{ width: 35, height: 35, color: 'white' }}
           onClick={
             () => {
               const payload = {
                 ...todo,
-                isCompleted: !todo.isCompleted,
+                completed: !todo.completed,
               }
-              changeTodo(todo, payload)
+              changeTodo(payload, todo)
             }}
         >
-          {todo.isCompleted ? '✔' : ''}
+          {todo.completed ? '✔' : ''}
         </Button>
       </ButtonGroup>
     )}
