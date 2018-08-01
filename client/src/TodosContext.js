@@ -21,7 +21,7 @@ export class TodosProvider extends Component {
 
   initializeTodos = async () => {
     try {
-      this.result = await makeRequest({ method: 'get', todo: null })
+      this.result = await makeRequest({ method: 'get' })
       this.todos = this.result.map((c) => {
         return {
           id: c.id,
@@ -40,7 +40,7 @@ export class TodosProvider extends Component {
 
   changeTodo = async (payload, todo) => {
     try {
-      this.result = await makeRequest({ method: 'put', todo: payload })
+      this.result = await makeRequest({ method: 'put', body: payload })
       this.setState((prevState) => {
         this.todo = { id: this.result.id, name: this.result.name, completed: this.result.completed }
         const newTodoList = _.without(prevState.todolist, todo)
@@ -55,7 +55,7 @@ export class TodosProvider extends Component {
     try {
       this.result = await makeRequest({
         method: 'post',
-        todo:
+        body:
         {
           ...todo,
           completed: false,
@@ -74,7 +74,8 @@ export class TodosProvider extends Component {
 
   deleteTodo = async (payload) => {
     try {
-      makeRequest({ method: 'delete', todo: payload })
+      console.log(payload)
+      await makeRequest({ method: 'delete', body: payload })
       this.setState((prevState) => {
         return {
           todolist: _.without(prevState.todolist, payload),

@@ -1,52 +1,39 @@
-export const makeRequest = async ({ method, todo }) => {
-  this.response = null
+export const handleRequest = (initOptions, id) => {
   try {
-    switch (method.toLowerCase()) {
+    switch (initOptions.method.toLowerCase()) {
       case 'post':
-        this.response = await fetch('http://localhost:3000/api/v1/todo_items', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(todo),
-        })
-        break
+        return fetch('http://localhost:3000/api/v1/todo_items', initOptions)
       case 'delete':
-        this.myInit = {
-          method: 'delete',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-        this.response = await fetch("http://localhost:3000/api/v1/todo_items/"+todo.id, this.myInit)
-        break
+        return fetch("http://localhost:3000/api/v1/todo_items/"+id, initOptions)
       case 'put':
-        this.myInit = {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(todo),
-        }
-        this.response = await fetch("http://localhost:3000/api/v1/todo_items/"+todo.id, this.myInit)
-        break
+        return fetch("http://localhost:3000/api/v1/todo_items/"+id, initOptions)
       default:
-        this.response = await fetch('http://localhost:3000/api/v1/todo_items')
-        break
+        return fetch('http://localhost:3000/api/v1/todo_items')
     }
   } catch (error) {
     console.log(error)
   }
+}
+
+export const makeRequest = async (initOptions) => {
+  const newBody = initOptions.body
+  const newInitOptions = {
+    ...initOptions,
+    headers: {
+      Accept: 'application/json',
       'Content-Type': 'application/json',
+    },
+    body: initOptions.body && JSON.stringify(newBody),
+  }
+  const response = await handleRequest(newInitOptions, initOptions.body && initOptions.body.id)
   try {
-    if (this.response === null) {
+    if (response === null) {
       throw new Error('Error, no promise was created')
     }
-    if (this.response.status >= 400) {
-      throw new Error(this.response.statusText)
+    if (response.status >= 400) {
+      throw new Error(response.statusText)
     }
-    return this.response.json()
+    return response.json()
   } catch (error) {
     console.log(error)
   }
