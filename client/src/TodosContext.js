@@ -1,6 +1,6 @@
 import React, { Component, createContext } from 'react'
 import _ from 'lodash'
-import { makeRequest, allTodos, createTodo, destroyTodo, updateTodo } from './ApiRequests'
+import { allTodos, createTodo, destroyTodo, updateTodo } from './ApiRequests'
 
 export const Context = createContext({
   todolist: [],
@@ -21,8 +21,8 @@ export class TodosProvider extends Component {
 
   initializeTodos = async () => {
     try {
-      this.result = await allTodos()
-      this.todos = this.result.map((c) => {
+      const result = await allTodos()
+      const todos = result.map((c) => {
         return {
           id: c.id,
           name: c.name,
@@ -30,7 +30,7 @@ export class TodosProvider extends Component {
         }
       })
       const newState = Object.assign({}, this.state, {
-        todolist: this.todos,
+        todolist: todos,
       })
       this.setState(newState)
     } catch (error) {
@@ -40,24 +40,24 @@ export class TodosProvider extends Component {
 
   changeTodo = async (newTodo, oldTodo) => {
     try {
-      this.result = await updateTodo(newTodo)
+      const result = await updateTodo(newTodo)
       this.setState((prevState) => {
-        this.todo = { id: this.result.id, name: this.result.name, completed: this.result.completed }
+        const todo = { id: result.id, name: result.name, completed: result.completed }
         const newTodoList = _.without(prevState.todolist, oldTodo)
-        return { todolist: [...newTodoList, _.cloneDeep(this.todo)] }
+        return { todolist: [...newTodoList, _.cloneDeep(todo)] }
       })
     } catch (error) {
       console.log(error)
     }
   }
 
-  createTodo = async (todo) => {
+  createTodo = async (payload) => {
     try {
-      this.result = await createTodo(todo)
-      this.todo = { id: this.result.id, name: this.result.name, completed: this.result.completed }
+      const result = await createTodo({ ...payload, completed: false })
+      const todo = { id: result.id, name: result.name, completed: result.completed }
       this.setState((state) => {
         return {
-          todolist: [...state.todolist, this.todo],
+          todolist: [...state.todolist, todo],
         }
       })
     } catch (error) {
