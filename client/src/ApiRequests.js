@@ -1,31 +1,12 @@
-export const handleRequest = (initOptions, id) => {
-  try {
-    switch (initOptions.method.toLowerCase()) {
-      case 'post':
-        return fetch('http://localhost:3000/api/v1/todo_items', initOptions)
-      case 'delete':
-        return fetch("http://localhost:3000/api/v1/todo_items/"+id, initOptions)
-      case 'put':
-        return fetch("http://localhost:3000/api/v1/todo_items/"+id, initOptions)
-      default:
-        return fetch('http://localhost:3000/api/v1/todo_items')
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-export const makeRequest = async (initOptions) => {
-  const newBody = initOptions.body
-  const newInitOptions = {
-    ...initOptions,
+export const makeRequest = async ({ route, method, body }) => {
+  const response = await fetch(route, {
+    method,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: initOptions.body && JSON.stringify(newBody),
-  }
-  const response = await handleRequest(newInitOptions, initOptions.body && initOptions.body.id)
+    body: body && JSON.stringify(body),
+  })
   try {
     if (response === null) {
       throw new Error('Error, no promise was created')
@@ -37,4 +18,20 @@ export const makeRequest = async (initOptions) => {
   } catch (error) {
     console.log(error)
   }
+}
+
+export const allTodos = () => {
+  return makeRequest({ method: 'GET', route: 'http://localhost:3000/api/v1/todo_items' })
+}
+
+export const createTodo = (payload) => {
+  return makeRequest({ method: 'POST', route: 'http://localhost:3000/api/v1/todo_items', body: payload })
+}
+
+export const destroyTodo = (payload) => {
+  return makeRequest({ method: 'DELETE', route: 'http://localhost:3000/api/v1/todo_items/'+payload.id })
+}
+
+export const updateTodo = (payload) => {
+  return makeRequest({ method: 'PUT', route: 'http://localhost:3000/api/v1/todo_items/'+payload.id, body: payload })
 }

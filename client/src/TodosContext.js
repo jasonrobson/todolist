@@ -1,6 +1,6 @@
 import React, { Component, createContext } from 'react'
 import _ from 'lodash'
-import { makeRequest } from './ApiRequests'
+import { makeRequest, allTodos, createTodo, destroyTodo, updateTodo } from './ApiRequests'
 
 export const Context = createContext({
   todolist: [],
@@ -21,7 +21,7 @@ export class TodosProvider extends Component {
 
   initializeTodos = async () => {
     try {
-      this.result = await makeRequest({ method: 'get' })
+      this.result = await allTodos()
       this.todos = this.result.map((c) => {
         return {
           id: c.id,
@@ -38,12 +38,12 @@ export class TodosProvider extends Component {
     }
   }
 
-  changeTodo = async (payload, todo) => {
+  changeTodo = async (newTodo, oldTodo) => {
     try {
-      this.result = await makeRequest({ method: 'put', body: payload })
+      this.result = await updateTodo(newTodo)
       this.setState((prevState) => {
         this.todo = { id: this.result.id, name: this.result.name, completed: this.result.completed }
-        const newTodoList = _.without(prevState.todolist, todo)
+        const newTodoList = _.without(prevState.todolist, oldTodo)
         return { todolist: [...newTodoList, _.cloneDeep(this.todo)] }
       })
     } catch (error) {
@@ -53,14 +53,7 @@ export class TodosProvider extends Component {
 
   createTodo = async (todo) => {
     try {
-      this.result = await makeRequest({
-        method: 'post',
-        body:
-        {
-          ...todo,
-          completed: false,
-        },
-      })
+      this.result = await createTodo(todo)
       this.todo = { id: this.result.id, name: this.result.name, completed: this.result.completed }
       this.setState((state) => {
         return {
@@ -74,8 +67,7 @@ export class TodosProvider extends Component {
 
   deleteTodo = async (payload) => {
     try {
-      console.log(payload)
-      await makeRequest({ method: 'delete', body: payload })
+      await destroyTodo(payload)
       this.setState((prevState) => {
         return {
           todolist: _.without(prevState.todolist, payload),
