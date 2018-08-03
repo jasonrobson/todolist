@@ -17,6 +17,7 @@ gem 'puma', '~> 3.11'
 # gem 'bcrypt', '~> 3.1.7'
 
 gem 'rack-cors', require: 'rack/cors'
+gem 'pundit'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -40,6 +41,7 @@ group :test do
   gem 'factory_girl_rails', '~> 4.0'
   gem 'shoulda-matchers', '~> 3.1'
   gem 'rspec-rails', '~> 3.5'
+  gem 'rspec_boolean'
 end
 
 group :development do

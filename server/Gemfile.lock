@@ -84,6 +84,8 @@ GEM
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     puma (3.12.0)
+    pundit (2.0.0)
+      activesupport (>= 3.0.0)
     rack (2.0.5)
     rack-cors (1.0.2)
     rack-test (1.1.0)
@@ -116,6 +118,10 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
+    rspec (3.7.0)
+      rspec-core (~> 3.7.0)
+      rspec-expectations (~> 3.7.0)
+      rspec-mocks (~> 3.7.0)
     rspec-core (3.7.1)
       rspec-support (~> 3.7.0)
     rspec-expectations (3.7.0)
@@ -133,6 +139,8 @@ GEM
       rspec-mocks (~> 3.7.0)
       rspec-support (~> 3.7.0)
     rspec-support (3.7.1)
+    rspec_boolean (0.0.6)
+      rspec (~> 3.3)
     ruby_dep (1.5.0)
     shoulda-matchers (3.1.2)
       activesupport (>= 4.0.0)
@@ -167,9 +175,11 @@ DEPENDENCIES
   faker
   listen (>= 3.0.5, < 3.2)
   puma (~> 3.11)
+  pundit
   rack-cors
   rails (~> 5.2.0)
   rspec-rails (~> 3.5)
+  rspec_boolean
   shoulda-matchers (~> 3.1)
   spring
   spring-watcher-listen (~> 2.0.0)
