@@ -6,7 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 15.times  do
-	TodoItem.create({
+	Todo.create({
 		name: Faker::Book.title,
 		completed: Faker::Boolean.boolean
 	})

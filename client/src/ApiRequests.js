@@ -21,17 +21,17 @@ export const makeRequest = async ({ route, method, body }) => {
 }
 
 export const allTodos = () => {
-  return makeRequest({ method: 'GET', route: 'http://localhost:3000/api/v1/todo_items' })
+  return makeRequest({ method: 'GET', route: 'http://localhost:3000/api/v1/todos' })
 }
 
 export const createTodo = (payload) => {
-  return makeRequest({ method: 'POST', route: 'http://localhost:3000/api/v1/todo_items', body: payload })
+  return makeRequest({ method: 'POST', route: 'http://localhost:3000/api/v1/todos', body: payload })
 }
 
 export const destroyTodo = (payload) => {
-  return makeRequest({ method: 'DELETE', route: 'http://localhost:3000/api/v1/todo_items/'+payload.id })
+  return makeRequest({ method: 'DELETE', route: 'http://localhost:3000/api/v1/todos/'+payload.id })
 }
 
 export const updateTodo = (payload) => {
-  return makeRequest({ method: 'PUT', route: 'http://localhost:3000/api/v1/todo_items/'+payload.id, body: payload })
+  return makeRequest({ method: 'PUT', route: 'http://localhost:3000/api/v1/todos/'+payload.id, body: payload })
 }
