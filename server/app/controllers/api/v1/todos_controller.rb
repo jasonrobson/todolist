@@ -8,6 +8,8 @@ module Api
       def show
         todo = Todo.find(params[:id])
         render json: todo,status: :ok
+      rescue
+        render status:404
       end
       def create
         todo = Todo.new(todo_params)
@@ -16,13 +18,14 @@ module Api
         else
           render json: todo.errors, status: :unprocessable_entity
         end
+      rescue
+        render status:404
       end
       def destroy
         todo = Todo.find(params[:id])
         todo.destroy
         render json: todo, status: :ok
       rescue e
-        debugger
         render :nothing, status: :unprocessable_entity
       end
       def update

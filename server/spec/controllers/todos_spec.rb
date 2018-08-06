@@ -3,48 +3,82 @@ require 'rails_helper'
 describe Api::V1::TodosController do
   let(:todo) { create(:todo) }
 
-  describe '#index' do
+  describe "GET 'index' " do
+    it "returns a successful 200 response" do
+        get :index, format: :json
+      expect(response).to be_success
+    end
 
-    subject { get :index  }
-
-    it 'returns valid JSON' do
-      expect(response).to be_successful
+    it "returns all the todos" do
+      FactoryGirl.create_list(:todo, 5)
+      get :index, format: :json
+      parsed_response = JSON.parse(response.body)
+      expect(parsed_response.length).to eq(5)
     end
   end
 
-  describe '#show' do
+  describe "GET 'show' " do
+    it "returns a successful 200 response" do
+      get :show, format: :json, params: { id: todo.id }
+      expect(response).to be_success
+    end
 
-    subject { get :show, params: { id: todo.to_param }  }
+    it "returns an existing todo" do
+      get :show, format: :json, params: { id: todo.id }
+      parsed_response = JSON.parse(response.body).to_json
+      expect(parsed_response).to eq(todo.to_json)
+    end
 
-    it 'returns valid JSON' do
-      expect(response).to be_successful
+    it "returns an non existing todo" do
+      get :show, format: :json, params: { id: '-1' }
+      expect(response.status).to eq(404)
     end
   end
 
   describe '#create' do
-
-    subject { get :create, params: todo.to_param }
+    it 'returns status 200' do
+      post :create, params: {todo:{name:"The Dictator", completed:false}}
+      expect(response).to be_successful
+    end
 
     it 'returns valid JSON' do
+      newtodo = {todo:{name:"The Dictator", completed:true}}
+      post :create, params: newtodo
       expect(response).to be_successful
+      expect(response.body).to_not eq(nil)
+    end
+
+    it 'returns invalid JSON' do
+      newtodo = {todo:{ completed:true}}
+      post :create, params: newtodo
+      expect(response).to_not be_successful
+      expect(response.body).to_not eq(nil)
     end
   end
 
   describe '#update' do
-
-    subject { get :update, params: { id: todo.to_param }  }
-
     it 'returns valid JSON' do
+      newTodo = create(:todo)
+      put :update, params: {todo:{name:"The Dictator", completed:true}, id: 1}
+      parsed_response = JSON.parse(response.body)
       expect(response).to be_successful
     end
   end
 
   describe '#destroy' do
-
-    subject { get :destroy, params: { id: todo.to_param } }
-
+    subject { delete :destroy, params: { id: todo.to_param } }
     it 'returns valid JSON' do
       expect(response).to be_successful
+    end
+    it 'deletes a comment' do
+      newTodo = create(:todo)
+      # Also, test if the action really deletes a comment.
+      # expect{delete :destroy, id: todo.id}.
+      # to change{todo.count}.by(-1)
+      #puts response
+      expect(response.body).to eq("")
+      puts Todo.all
+      expect(Todo.all.length).to eq(0)
     end
   end
 end
