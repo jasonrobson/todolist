@@ -222,7 +222,23 @@
         1
       ],
       "/Users/getttecnologia/Projects/github/todolist/server/lib/error/error_handler.rb": [
-
+        null,
+        null,
+        1,
+        1,
+        1,
+        1,
+        1,
+        null,
+        null,
+        null,
+        1,
+        1,
+        0,
+        0,
+        null,
+        null,
+        null
       ],
       "/Users/getttecnologia/Projects/github/todolist/server/config/environments/test.rb": [
         1,
@@ -396,6 +412,7 @@
         2,
         null,
         1,
+        1,
         null,
         null,
         0,
@@ -427,10 +444,7 @@
       ],
       "/Users/getttecnologia/Projects/github/todolist/server/app/controllers/application_controller.rb": [
         1,
-        null,
-        null,
-        null,
-        null,
+        1,
         null
       ],
       "/Users/getttecnologia/Projects/github/todolist/server/spec/models/todo_spec.rb": [
@@ -458,6 +472,6 @@
         null
       ]
     },
-    "timestamp": 1533653443
+    "timestamp": 1533660201
   }
 }

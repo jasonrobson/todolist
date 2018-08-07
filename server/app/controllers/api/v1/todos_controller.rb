@@ -26,7 +26,7 @@ module Api
       def destroy
         todo = Todo.find(params[:id])
         todo.destroy
-        render status: :ok
+        render json: todo, status: :ok
       rescue ActiveRecord::RecordNotFound => e
         render json: {error: e.to_s}, status: :not_found
       end
