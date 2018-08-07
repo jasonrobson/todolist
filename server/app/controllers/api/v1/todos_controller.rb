@@ -4,12 +4,14 @@ module Api
       def index
         todos = Todo.order('created_at DESC');
         render json: todos,status: :ok
+      rescue => e #StandardError
+        render json: {error: e.to_s}, status: :unprocessable_entity
       end
       def show
         todo = Todo.find(params[:id])
-        render json: todo,status: :ok
-      rescue
-        render status:404
+        render json: todo, status: :ok
+      rescue ActiveRecord::RecordNotFound => e
+        render json: {error: e.to_s}, status: :not_found
       end
       def create
         todo = Todo.new(todo_params)
@@ -18,15 +20,15 @@ module Api
         else
           render json: todo.errors, status: :unprocessable_entity
         end
-      rescue
-        render status:404
+      rescue => e #StandardError
+        render json: {error: e.to_s}, status: :unprocessable_entity
       end
       def destroy
         todo = Todo.find(params[:id])
         todo.destroy
-        render json: todo, status: :ok
-      rescue e
-        render :nothing, status: :unprocessable_entity
+        render status: :ok
+      rescue ActiveRecord::RecordNotFound => e
+        render json: {error: e.to_s}, status: :not_found
       end
       def update
         todo = Todo.find(params[:id])
@@ -35,6 +37,8 @@ module Api
         else
           render json: todo.errors, status: :unprocessable_entity
         end
+      rescue ActiveRecord::RecordNotFound => e
+        render json: {error: e.to_s}, status: :not_found
       end
       private
       def todo_params
