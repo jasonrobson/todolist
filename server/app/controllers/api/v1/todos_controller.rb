@@ -4,14 +4,16 @@ module Api
       def index
         todos = Todo.order('created_at DESC');
         render json: todos,status: :ok
-      rescue => e #StandardError
-        render json: {error: e.to_s}, status: :unprocessable_entity
       end
       def show
-        todo = Todo.find(params[:id])
-        render json: todo, status: :ok
-      rescue ActiveRecord::RecordNotFound => e
-        render json: {error: e.to_s}, status: :not_found
+        todo = Todo.find_by(id: params[:id])
+        if todo.present?
+          render json: todo, status: :ok
+        else
+          render json: {
+            error: 'Todo with id #{params[:id]} not found.'
+          }, status: :not_found
+        end
       end
       def create
         todo = Todo.new(todo_params)
@@ -20,25 +22,31 @@ module Api
         else
           render json: todo.errors, status: :unprocessable_entity
         end
-      rescue => e #StandardError
-        render json: {error: e.to_s}, status: :unprocessable_entity
       end
       def destroy
-        todo = Todo.find(params[:id])
-        todo.destroy
-        render json: todo, status: :ok
-      rescue ActiveRecord::RecordNotFound => e
-        render json: {error: e.to_s}, status: :not_found
-      end
-      def update
-        todo = Todo.find(params[:id])
-        if todo.update_attributes(todo_params)
+        todo = Todo.find_by(id: params[:id])
+        if todo.present?
+          todo.destroy
           render json: todo, status: :ok
         else
-          render json: todo.errors, status: :unprocessable_entity
+          render json: {
+            error: 'Todo with id #{params[:id]} not found.'
+          }, status: :not_found
         end
-      rescue ActiveRecord::RecordNotFound => e
-        render json: {error: e.to_s}, status: :not_found
+      end
+      def update
+        todo = Todo.find_by(id: params[:id])
+        if todo.present?
+          if todo.update_attributes(todo_params)
+            render json: todo, status: :ok
+          else
+            render json: todo.errors, status: :unprocessable_entity
+          end
+        else
+          render json: {
+            error: 'Todo with id #{params[:id]} not found.'
+          }, status: :not_found
+        end
       end
       private
       def todo_params

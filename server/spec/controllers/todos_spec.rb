@@ -70,12 +70,8 @@ describe Api::V1::TodosController do
   end
 
   describe '#destroy' do
-    it 'returns valid JSON' do
-      expect(response).to be_successful
-    end
     it 'deletes an existing todo' do
       delete :destroy, params: { id: todo.to_param }
-      expect(response.body).to eq(" ")
       expect(Todo.all.length).to eq(0)
     end
     it 'tries to delete a non existing todo' do
