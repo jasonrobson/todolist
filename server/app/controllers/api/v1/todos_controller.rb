@@ -11,7 +11,7 @@ module Api
           render json: todo, status: :ok
         else
           render json: {
-            error: 'Todo with id #{params[:id]} not found.'
+            error: "Todo with id #{params[:id]} not found."
           }, status: :not_found
         end
       end
@@ -30,7 +30,7 @@ module Api
           render json: todo, status: :ok
         else
           render json: {
-            error: 'Todo with id #{params[:id]} not found.'
+            error: "Todo with id #{params[:id]} not found."
           }, status: :not_found
         end
       end
@@ -44,7 +44,7 @@ module Api
           end
         else
           render json: {
-            error: 'Todo with id #{params[:id]} not found.'
+            error: "Todo with id #{params[:id]} not found."
           }, status: :not_found
         end
       end
