@@ -12,7 +12,6 @@ const getFilteredTodos = ({ todolist, filterBy }) => (
 )
 
 class TodoList extends Component {
-
   componentDidMount() {
     this.props.initializeTodos()
   }

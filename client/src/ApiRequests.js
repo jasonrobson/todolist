@@ -1,3 +1,6 @@
+// import React from 'react'
+// import AlertPopup from './AlertPopup'
+
 export const makeRequest = async ({ query }) => {
   const response = await fetch('http://localhost:3000/graphql/', {
     method: 'POST',
@@ -5,9 +8,9 @@ export const makeRequest = async ({ query }) => {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
+    body: {
       query,
-    }),
+    },
   })
   try {
     if (response === null) {
@@ -18,12 +21,13 @@ export const makeRequest = async ({ query }) => {
     }
     return response.json()
   } catch (error) {
-    console.log(error)
+    return error
+    // return (<div><AlertPopup type={"danger"} message={error} /></div>)
   }
 }
 
-export const allTodos = () => {
-  return makeRequest({
+export const allTodos = async () => {
+  const request = await makeRequest({
     query: `{
       allTodos() {
         id
@@ -32,10 +36,11 @@ export const allTodos = () => {
       }
     }`,
   })
+  return request.data["allTodos"]
 }
 
-export const createTodo = (payload) => {
-  return makeRequest({
+export const createTodo = async (payload) => {
+  const request = await makeRequest({
     query: `mutation {
       createTodo (
         todo: {
@@ -49,10 +54,11 @@ export const createTodo = (payload) => {
       }
     }`,
   })
+  return request.data["createTodo"]
 }
 
-export const destroyTodo = (payload) => {
-  return makeRequest({
+export const destroyTodo = async (payload) => {
+  const request = await makeRequest({
     query: `mutation {
       deleteTodo (
         id: ${payload.id}
@@ -63,10 +69,11 @@ export const destroyTodo = (payload) => {
       }
     }`,
   })
+  return request.data["deleteTodo"]
 }
 
-export const updateTodo = (payload) => {
-  return makeRequest({
+export const updateTodo = async (payload) => {
+  const request = await makeRequest({
     query: `mutation {
       updateTodo (
         id: ${payload.id},
@@ -81,4 +88,5 @@ export const updateTodo = (payload) => {
       }
     }`,
   })
+  return request.data["updateTodo"]
 }
