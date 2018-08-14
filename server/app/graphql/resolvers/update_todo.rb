@@ -1,19 +1,14 @@
 class Resolvers::UpdateTodo < GraphQL::Function
   argument :id, !types.ID
-  argument :name, types.String
-  argument :completed, types.Boolean
+  argument :todo, Inputs::TodoInput
 
   type Types::TodoType
 
   def call(_obj, args, _ctx)
     todo = Todo.find_by(id: args[:id])
     return unless todo.present?
-    if args[:name].present?
-      todo.name = args[:name] unless args[:name].length == 0
-    end
-    if args[:completed].present?
-      todo.completed = args[:completed]
-    end
+    todo.name = args[:todo][:name] unless args[:todo][:name].length == 0
+    todo.completed = args[:todo][:completed]
     todo.save
     todo
   end
