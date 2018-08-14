@@ -1,11 +1,13 @@
-export const makeRequest = async ({ route, method, body }) => {
-  const response = await fetch(route, {
-    method,
+export const makeRequest = async ({ query }) => {
+  const response = await fetch('http://localhost:3000/graphql/', {
+    method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: body && JSON.stringify(body),
+    body: JSON.stringify({
+      query,
+    }),
   })
   try {
     if (response === null) {
@@ -22,77 +24,61 @@ export const makeRequest = async ({ route, method, body }) => {
 
 export const allTodos = () => {
   return makeRequest({
-    method: 'POST',
-    route: 'http://localhost:3000/graphql/',
-    body: {
-      query: `{
-        allTodos() {
-          id
-          name
-          completed
-        }
-      }`,
-    },
+    query: `{
+      allTodos() {
+        id
+        name
+        completed
+      }
+    }`,
   })
 }
 
 export const createTodo = (payload) => {
   return makeRequest({
-    method: 'POST',
-    route: 'http://localhost:3000/graphql/',
-    body: {
-      query: `mutation {
-        createTodo (
-          todo: {
-            name: "${payload.name}",
-            completed: ${payload.completed}
-          }
-        ){
-          id
-          name
-          completed
+    query: `mutation {
+      createTodo (
+        todo: {
+          name: "${payload.name}",
+          completed: ${payload.completed}
         }
-      }`,
-    },
+      ){
+        id
+        name
+        completed
+      }
+    }`,
   })
 }
 
 export const destroyTodo = (payload) => {
   return makeRequest({
-    method: 'POST',
-    route: 'http://localhost:3000/graphql/',
-    body: {
-      query: `mutation {
-        deleteTodo (
-          id: ${payload.id}
-        ){
-          id
-          name
-          completed
-        }
-      }`,
-    },
+    query: `mutation {
+      deleteTodo (
+        id: ${payload.id}
+      ){
+        id
+        name
+        completed
+      }
+    }`,
   })
 }
 
 export const updateTodo = (payload) => {
   return makeRequest({
-    method: 'POST',
-    route: 'http://localhost:3000/graphql/',
-    body: {
-      query: `mutation {
-        updateTodo (
-          id: ${payload.id},
-          todo: {
-            name: "${payload.name}",
-            completed: ${payload.completed},
-          }
-        ){
-          id
-          name
-          completed
+    query: `mutation {
+      updateTodo (
+        id: ${payload.id},
+        todo: {
+          name: "${payload.name}",
+          completed: ${payload.completed},
         }
-      }`,
-    },
+      ){
+        id
+        name
+        completed
+      }
+    }`,
   })
 }
