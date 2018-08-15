@@ -1,8 +1,16 @@
 import React, { Component, Fragment } from 'react'
 import { Compose } from 'react-powerplug'
+import styled from 'styled-components'
 import { TodosConsumer } from './TodosContext'
 import { TodoConsumer } from './TodoContext'
 import AlertPopup from './AlertPopup'
+
+const InputText = styled.input`
+  background-color: ${({ typing }) => typing ? 'red' : 'white'};
+  visibility: ${({ editing }) => editing ? 'visible' : 'hidden'};
+  position: ${({ editing }) => editing ? 'relative' : 'absolute'};
+  width: '200px';
+`
 
 class TodoTextInput extends Component {
   state = {
@@ -41,16 +49,11 @@ class TodoTextInput extends Component {
     return (
       <Fragment>
         { this.state.errorMessage != null ? <AlertPopup type="danger" message={this.state.errorMessage} /> : null }
-        <input
-          style={{
-            backgroundColor: typing ? 'red' : 'white',
-            visibility: editing ? 'visible' : 'hidden',
-            position: editing ? 'relative' : 'absolute',
-            width: '200px',
-          }}
+        <InputText
           defaultValue={todo.name}
           onKeyDown={this.onKeyDown}
           onKeyUp={this.onKeyUp}
+          {...this.props}
         />
       </Fragment>
     )
