@@ -4,7 +4,6 @@ class Resolvers::SearchTodo < GraphQL::Function
   type Types::TodoType
 
   def call(_obj, args, _ctx)
-    todo = Todo.find_by(id: args[:id])
-    todo.nil? ? Todo.nil_todo : todo
+    Todo.find_by(id: args[:id])
   end
 end

@@ -1,4 +1,4 @@
-export const makeRequest = async ({ query }) => {
+export const makeRequest = async ({ query, variables }) => {
   const response = await fetch('http://localhost:3000/graphql/', {
     method: 'POST',
     headers: {
@@ -7,11 +7,13 @@ export const makeRequest = async ({ query }) => {
     },
     body: JSON.stringify({
       query,
+      variables,
     }),
   })
   if (response === null) {
     throw new Error('Error, no promise was created')
   }
+
   if (response.status >= 400) {
     throw new Error(response.statusText)
   }
@@ -33,52 +35,56 @@ export const allTodos = async () => {
 
 export const createTodo = async (payload) => {
   const request = await makeRequest({
-    query: `mutation {
-      createTodo (
-        todo: {
-          name: "${payload.name}",
-          completed: ${payload.completed}
-        }
-      ){
+    query: `mutation Create($todo: TodoInput!) {
+      createTodo(todo: $todo) {
         id
         name
         completed
       }
     }`,
+    variables: {
+      todo: {
+        completed: payload.completed,
+        name: payload.name,
+      },
+    },
   })
   return request.data["createTodo"]
 }
 
 export const destroyTodo = async (payload) => {
   const request = await makeRequest({
-    query: `mutation {
-      deleteTodo (
-        id: ${payload.id}
-      ){
+    query: `mutation Delete($id: ID!) {
+      deleteTodo(id: $id) {
         id
         name
         completed
       }
     }`,
+    variables: {
+      id: payload.id,
+    },
   })
   return request.data["deleteTodo"]
 }
 
 export const updateTodo = async (payload) => {
   const request = await makeRequest({
-    query: `mutation {
-      updateTodo (
-        id: ${payload.id},
-        todo: {
-          name: "${payload.name}",
-          completed: ${payload.completed},
-        }
-      ){
+    query: `mutation ($id: ID!, $todo: TodoInput!) {
+      updateTodo(id: $id, todo: $todo) {
         id
         name
         completed
       }
     }`,
+    variables: {
+      id: payload.id,
+      todo: {
+        name: payload.name,
+        completed: payload.completed,
+      },
+    },
   })
+
   return request.data["updateTodo"]
 }

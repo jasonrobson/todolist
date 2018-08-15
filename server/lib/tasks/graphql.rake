@@ -6,8 +6,8 @@ namespace :graphql do
 
     file = File.open('metadata/schema.graphql', 'w')
     file.write(schema_text)
-  rescue => err
-    puts err
+  # rescue err =>
+  #   puts err
   end
 end
 

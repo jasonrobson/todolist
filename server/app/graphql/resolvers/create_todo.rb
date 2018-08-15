@@ -5,7 +5,7 @@ class Resolvers::CreateTodo < GraphQL::Function
 
   def call(_obj, args, _ctx)
     Todo.create!(
-      name: args[:todo][:name]
+      name: args[:todo][:name],
       completed: args[:todo][:completed]
     )
   end
