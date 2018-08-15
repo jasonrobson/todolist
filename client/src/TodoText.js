@@ -1,13 +1,6 @@
 import React from 'react'
-import { TodosConsumer } from './TodosContext'
+import TodoTextInput from './TodoTextInput'
 import { TodoConsumer, TodoProvider } from './TodoContext'
-
-const getBackgroundColor = (typing) => {
-  if (typing) {
-    return 'red'
-  }
-  return 'white'
-}
 
 const TodoTextSpan = ({ todo }) => (
   <TodoConsumer>
@@ -28,48 +21,6 @@ const TodoTextSpan = ({ todo }) => (
       </span>
     )}
   </TodoConsumer>
-)
-
-const TodoTextInput = ({ todo }) => (
-  <TodosConsumer>
-    {({
-      changeTodo,
-    }) => (
-      <TodoConsumer>
-        {({
-          editing,
-          typing,
-          onChangeTyping,
-          resetProps,
-        }) => (
-          <input
-            style={{
-              backgroundColor: getBackgroundColor(typing),
-              visibility: editing ? 'visible' : 'hidden',
-              position: editing ? 'relative' : 'absolute',
-              width: '200px',
-            }}
-            defaultValue={todo.name}
-            onKeyDown={(event) => {
-              const newName = event.target.value
-              if (event.key === 'Enter') {
-                const payload = {
-                  ...todo,
-                  name: newName,
-                }
-                changeTodo(payload, todo)
-                resetProps()
-              }
-            }}
-            onKeyUp={(event) => {
-              const newName = event.target.value
-              onChangeTyping(newName !== todo.name)
-            }}
-          />
-        )}
-      </TodoConsumer>
-    )}
-  </TodosConsumer>
 )
 
 const TodoText = props => (

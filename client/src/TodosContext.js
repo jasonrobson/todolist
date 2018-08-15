@@ -1,7 +1,6 @@
 import React, { Component, createContext } from 'react'
 import _ from 'lodash'
 import { allTodos, createTodo, destroyTodo, updateTodo } from './ApiRequests'
-import AlertPopup from './AlertPopup'
 
 export const Context = createContext({
   todolist: [],
@@ -21,66 +20,46 @@ export class TodosProvider extends Component {
   }
 
   initializeTodos = async () => {
-    try {
-      const result = await allTodos()
-      const todos = result.map((c) => {
-        return {
-          id: c.id,
-          name: c.name,
-          completed: c.completed,
-        }
-      })
-      const newState = Object.assign({}, this.state, {
-        todolist: todos,
-      })
-      this.setState(newState)
-    } catch (error) {
-      // return (<AlertPopup type={"danger"} message={error} />)
-      console.log(error)
-    }
+    const result = await allTodos()
+    const todos = result.map((c) => {
+      return {
+        id: c.id,
+        name: c.name,
+        completed: c.completed,
+      }
+    })
+    const newState = Object.assign({}, this.state, {
+      todolist: todos,
+    })
+    this.setState(newState)
   }
 
   changeTodo = async (newTodo, oldTodo) => {
-    try {
-      const result = await updateTodo(newTodo)
-      this.setState((prevState) => {
-        const todo = { id: result.id, name: result.name, completed: result.completed }
-        const newTodoList = _.without(prevState.todolist, oldTodo)
-        return { todolist: [...newTodoList, _.cloneDeep(todo)] }
-      })
-    } catch (error) {
-      // return (<AlertPopup type={"danger"} message={error} />)
-      console.log(error)
-    }
+    const result = await updateTodo(newTodo)
+    this.setState((prevState) => {
+      const todo = { id: result.id, name: result.name, completed: result.completed }
+      const newTodoList = _.without(prevState.todolist, oldTodo)
+      return { todolist: [...newTodoList, _.cloneDeep(todo)] }
+    })
   }
 
   createTodo = async (payload) => {
-    try {
-      const result = await createTodo({ ...payload, completed: false })
-      const todo = { id: result.id, name: result.name, completed: result.completed }
-      this.setState((state) => {
-        return {
-          todolist: [...state.todolist, todo],
-        }
-      })
-    } catch (error) {
-      // return (<AlertPopup type={"danger"} message={error} />)
-      console.log(error)
-    }
+    const result = await createTodo({ ...payload, completed: false })
+    const todo = { id: result.id, name: result.name, completed: result.completed }
+    this.setState((state) => {
+      return {
+        todolist: [...state.todolist, todo],
+      }
+    })
   }
 
   deleteTodo = async (payload) => {
-    try {
-      await destroyTodo(payload)
-      this.setState((prevState) => {
-        return {
-          todolist: _.without(prevState.todolist, payload),
-        }
-      })
-    } catch (error) {
-      //return (<AlertPopup type={"danger"} message={error} />)
-      console.log(error)
-    }
+    await destroyTodo(payload)
+    this.setState((prevState) => {
+      return {
+        todolist: _.without(prevState.todolist, payload),
+      }
+    })
   }
 
   render() {

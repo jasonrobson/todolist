@@ -1,6 +1,3 @@
-// import React from 'react'
-// import AlertPopup from './AlertPopup'
-
 export const makeRequest = async ({ query }) => {
   const response = await fetch('http://localhost:3000/graphql/', {
     method: 'POST',
@@ -8,22 +5,17 @@ export const makeRequest = async ({ query }) => {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: {
+    body: JSON.stringify({
       query,
-    },
+    }),
   })
-  try {
-    if (response === null) {
-      throw new Error('Error, no promise was created')
-    }
-    if (response.status >= 400) {
-      throw new Error(response.statusText)
-    }
-    return response.json()
-  } catch (error) {
-    return error
-    // return (<div><AlertPopup type={"danger"} message={error} /></div>)
+  if (response === null) {
+    throw new Error('Error, no promise was created')
   }
+  if (response.status >= 400) {
+    throw new Error(response.statusText)
+  }
+  return response.json()
 }
 
 export const allTodos = async () => {
