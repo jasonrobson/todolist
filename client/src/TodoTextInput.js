@@ -9,7 +9,7 @@ const InputText = styled.input`
   background-color: ${({ typing }) => typing ? 'red' : 'white'};
   visibility: ${({ editing }) => editing ? 'visible' : 'hidden'};
   position: ${({ editing }) => editing ? 'relative' : 'absolute'};
-  width: '200px';
+  width: 200px;
 `
 
 class TodoTextInput extends Component {
