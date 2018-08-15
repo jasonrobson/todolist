@@ -14,7 +14,7 @@ const InputText = styled.input`
 
 class TodoTextInput extends Component {
   state = {
-    errorMessage: null,
+    error: null,
   }
 
   onKeyDown = async (event) => {
@@ -30,7 +30,7 @@ class TodoTextInput extends Component {
         this.props.resetProps()
       }
     } catch (error) {
-      this.setState({ errorMessage: error })
+      this.setState({ error })
     }
   }
 
@@ -40,15 +40,11 @@ class TodoTextInput extends Component {
   }
 
   render() {
-    const {
-      typing,
-      editing,
-      todo,
-    } = this.props
+    const { todo } = this.props
 
     return (
       <Fragment>
-        { this.state.errorMessage != null ? <AlertPopup type="danger" message={this.state.errorMessage} /> : null }
+        { this.state.error != null ? <AlertPopup type="danger" error={this.state.error} onDismiss={() => this.setState({ error: null })} /> : null }
         <InputText
           defaultValue={todo.name}
           onKeyDown={this.onKeyDown}
