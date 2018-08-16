@@ -1,12 +1,11 @@
 import React, { Fragment } from 'react'
-import { Compose } from 'react-powerplug'
-import TodoList from './Todolist'
-import { TodosProvider, TodosConsumer } from './TodosContext'
+import TodoListContainer from './Todolist'
+import { TodosProvider } from './TodosContext'
 import { FilterProvider } from './FilterContext'
 import { OrderProvider } from './OrderContext'
 import './Main.css'
 import TodoInputContainer from './TodoInput'
-import { AlertToastProvider, AlertToastConsumer } from './AlertToastContext'
+import { AlertToastProvider } from './AlertToastContext'
 
 const HeaderContent = () => (
   <Fragment>
@@ -24,11 +23,7 @@ const App = () => (
           <div className="todobox">
             <HeaderContent />
             <TodoInputContainer />
-            <Compose components={[AlertToastConsumer, TodosConsumer]}>
-              {({ notify }, { initializeTodos }) => (
-                <TodoList notify={notify} initializeTodos={initializeTodos} />
-              )}
-            </Compose>
+            <TodoListContainer />
           </div>
         </TodosProvider>
       </FilterProvider>

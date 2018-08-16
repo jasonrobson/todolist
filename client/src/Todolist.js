@@ -6,6 +6,7 @@ import { OrderConsumer } from './OrderContext'
 import { FilterConsumer } from './FilterContext'
 import { TodosConsumer } from './TodosContext'
 import TodoTable from './TodoTable'
+import { AlertToastConsumer } from './AlertToastContext'
 
 const getFilteredTodos = ({ todolist, filterBy }) => (
   todolist.filter(toFilter(filterBy))
@@ -14,8 +15,8 @@ const getFilteredTodos = ({ todolist, filterBy }) => (
 class TodoList extends Component {
   async componentDidMount() {
     const {
-      initializeTodos,
       notify,
+      initializeTodos,
     } = this.props
     try {
       await initializeTodos()
@@ -31,7 +32,7 @@ class TodoList extends Component {
           {({ orders }, { filterBy }, { todolist }) => {
             const todolistFiltered = getFilteredTodos({ todolist, filterBy })
             const todolistOrdered = _.orderBy(todolistFiltered, ['completed', 'name'], [orders.completed, orders.name])
-            return <TodoListContainer todolist={todolist} todolistOrdered={todolistOrdered} />
+            return <TodosTableContainer todolist={todolist} todolistOrdered={todolistOrdered} />
           }}
         </Compose>
       </Fragment>
@@ -40,6 +41,18 @@ class TodoList extends Component {
 }
 
 const TodoListContainer = props => (
+  <Compose components={[AlertToastConsumer, TodosConsumer]}>
+    {({ notify }, { initializeTodos }) => (
+      <TodoList
+        notify={notify}
+        initializeTodos={initializeTodos}
+        {...props}
+      />
+    )}
+  </Compose>
+)
+
+const TodosTableContainer = props => (
   props.todolist.length > 0 ? (
     <div>
       <hr />
@@ -49,4 +62,4 @@ const TodoListContainer = props => (
   ) : null
 )
 
-export default TodoList
+export default TodoListContainer
