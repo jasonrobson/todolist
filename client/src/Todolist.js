@@ -6,50 +6,47 @@ import { OrderConsumer } from './OrderContext'
 import { FilterConsumer } from './FilterContext'
 import { TodosConsumer } from './TodosContext'
 import TodoTable from './TodoTable'
-import AlertPopup from './AlertPopup'
 
 const getFilteredTodos = ({ todolist, filterBy }) => (
   todolist.filter(toFilter(filterBy))
 )
 
 class TodoList extends Component {
-  state = {
-    errorMessage: null,
-  }
-
   async componentDidMount() {
+    const {
+      initializeTodos,
+      notify,
+    } = this.props
     try {
-      await this.props.initializeTodos()
+      await initializeTodos()
     } catch (error) {
-      this.setState({
-        errorMessage: error,
-      })
+      notify('error', error.message)
     }
   }
 
   render() {
     return (
       <Fragment>
-        { this.state.errorMessage != null ? <AlertPopup type={"danger"} message={this.state.errorMessage} /> : null }
         <Compose components={[OrderConsumer, FilterConsumer, TodosConsumer]}>
           {({ orders }, { filterBy }, { todolist }) => {
             const todolistFiltered = getFilteredTodos({ todolist, filterBy })
             const todolistOrdered = _.orderBy(todolistFiltered, ['completed', 'name'], [orders.completed, orders.name])
-
-            return (
-              todolist.length > 0 ? (
-                <div>
-                  <hr />
-                  <TodoTable todos={todolistOrdered} />
-                  <Filters />
-                </div>
-              ) : null
-            )
+            return <TodoListContainer todolist={todolist} todolistOrdered={todolistOrdered} />
           }}
         </Compose>
       </Fragment>
     )
   }
 }
+
+const TodoListContainer = props => (
+  props.todolist.length > 0 ? (
+    <div>
+      <hr />
+      <TodoTable todos={props.todolistOrdered} />
+      <Filters />
+    </div>
+  ) : null
+)
 
 export default TodoList

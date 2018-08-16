@@ -1,11 +1,26 @@
 import React, { Component, Fragment } from 'react'
+import { Compose } from 'react-powerplug'
 import { Button, ButtonGroup } from 'reactstrap'
 import { TodosConsumer } from './TodosContext'
-import AlertPopup from './AlertPopup'
+import { AlertToastConsumer } from './AlertToastContext'
 
 class TodoCheck extends Component {
-  state = {
-    errorMessage: null,
+
+  onClick = async () => {
+    const {
+      todo,
+      changeTodo,
+      notify,
+    } = this.props
+    try {
+      const payload = {
+        ...todo,
+        completed: !todo.completed,
+      }
+      await changeTodo(payload, todo)
+    } catch (error) {
+      notify('error', error.message)
+    }
   }
 
   render() {
@@ -14,38 +29,32 @@ class TodoCheck extends Component {
     } = this.props
     return (
       <Fragment>
-        { this.state.errorMessage != null ? <AlertPopup type={"danger"} message={this.state.errorMessage} /> : null }
-        <TodosConsumer>
-          {({
-            changeTodo,
-          }) => (
-            <ButtonGroup>
-              <Button
-                color={todo.completed ? "secondary" : "primary"}
-                id={todo.id}
-                active={todo.completed}
-                style={{ width: 35, height: 35, color: 'white' }}
-                onClick={
-                  async () => {
-                    try {
-                      const payload = {
-                        ...todo,
-                        completed: !todo.completed,
-                      }
-                      await changeTodo(payload, todo)
-                    } catch (error) {
-                      this.setState({ errorMessage: error })
-                    }
-                  }}
-              >
-                {todo.completed ? '✔' : ''}
-              </Button>
-            </ButtonGroup>
-          )}
-        </TodosConsumer>
+        <ButtonGroup>
+          <Button
+            color={todo.completed ? "secondary" : "primary"}
+            id={todo.id}
+            active={todo.completed}
+            style={{ width: 35, height: 35, color: 'white' }}
+            onClick={this.onClick}
+          >
+            {todo.completed ? '✔' : ''}
+          </Button>
+        </ButtonGroup>
       </Fragment>
     )
   }
 }
 
-export default TodoCheck
+const TodoCheckContainer = props => (
+  <Compose components={[TodosConsumer, AlertToastConsumer]}>
+    {({ changeTodo }, { notify }) => (
+      <TodoCheck
+        changeTodo={changeTodo}
+        notify={notify}
+        {...props}
+      />
+    )}
+  </Compose>
+)
+
+export default TodoCheckContainer

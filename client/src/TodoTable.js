@@ -1,8 +1,8 @@
 import React from 'react'
 import TodoText from './TodoText'
 import Order from './Order'
-import TodoCheck from './TodoCheck'
 import TodoDelete from './TodoDelete'
+import TodoCheckContainer from './TodoCheck';
 
 const TodoTable = ({ todos }) => (
   <table>
@@ -25,7 +25,7 @@ const TodoTable = ({ todos }) => (
         return (
           <tr key={todo.id}>
             <td>
-              <TodoCheck todo={todo} />
+              <TodoCheckContainer todo={todo} />
             </td>
             <td>
               <TodoText todo={todo} />

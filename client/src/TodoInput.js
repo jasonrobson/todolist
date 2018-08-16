@@ -1,22 +1,23 @@
 import React, { Component, Fragment } from 'react'
+import { Compose } from 'react-powerplug'
 import styled from 'styled-components'
 import { TodosConsumer } from './TodosContext'
-import AlertPopup from './AlertPopup'
+import { AlertToastConsumer } from './AlertToastContext'
 
 const InputText = styled.input`
-  width: 200px;
+  width: 500px;
 `
 
 class TodoInput extends Component {
   state = {
     fieldName: '',
-    error: null,
   }
 
   onKeyDown = async (event) => {
     const {
       createTodo,
-    } = this.state
+      notify,
+    } = this.props
     if (event.key === 'Enter' && event.target.value !== '') {
       try {
         const newTodo = {
@@ -25,7 +26,7 @@ class TodoInput extends Component {
         await createTodo(newTodo)
         this.resetName()
       } catch (error) {
-        this.setState({ error })
+        notify('error', error.message)
       }
     }
   }
@@ -41,11 +42,9 @@ class TodoInput extends Component {
   render() {
     const {
       fieldName,
-      error,
     } = this.state
     return (
       <Fragment>
-        { error !== null ? <AlertPopup type="danger" message={error} /> : null }
         <InputText
           placeholder="Write your task and press enter"
           onKeyDown={this.onKeyDown}
@@ -59,14 +58,15 @@ class TodoInput extends Component {
 
 
 const TodoInputContainer = props => (
-  <TodosConsumer>
-    {({ createTodo }) => (
+  <Compose components={[TodosConsumer, AlertToastConsumer]}>
+    {({ createTodo }, { notify }) => (
       <TodoInput
         createTodo={createTodo}
+        notify={notify}
         {...props}
       />
     )}
-  </TodosConsumer>
+  </Compose>
 )
 
 export default TodoInputContainer

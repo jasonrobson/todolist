@@ -6,6 +6,7 @@
     "bootstrap": "^4.1.2",
     "jquery": "^3.3.1",
     "lodash": "^4.17.10",
+    "mdbreact": "^4.7.0",
     "popper.js": "^1.14.3",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
