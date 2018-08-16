@@ -27,7 +27,7 @@ export const allTodos = async () => {
       }
     }`,
   })
-  return request.data["allTodos"]
+  return request.data.allTodos
 }
 
 export const createTodo = async (payload) => {
@@ -46,7 +46,7 @@ export const createTodo = async (payload) => {
       },
     },
   })
-  return request.data["createTodo"]
+  return request.data.createTodo
 }
 
 export const destroyTodo = async (payload) => {
@@ -62,7 +62,7 @@ export const destroyTodo = async (payload) => {
       id: payload.id,
     },
   })
-  return request.data["deleteTodo"]
+  return request.data.deleteTodo
 }
 
 export const updateTodo = async (payload) => {
@@ -83,5 +83,5 @@ export const updateTodo = async (payload) => {
     },
   })
 
-  return request.data["updateTodo"]
+  return request.data.updateTodo
 }
