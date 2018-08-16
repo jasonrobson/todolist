@@ -8,7 +8,6 @@ const Filter = ({ filterBy, label, ...props }) => (
     {({ changeFilter }) => (
       <Button
         outline color="danger"
-        key={filterBy}
         type="button"
         onClick={() => { changeFilter(filterBy) }}
         {...props}
