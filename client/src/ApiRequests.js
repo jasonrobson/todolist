@@ -10,9 +10,6 @@ export const makeRequest = async ({ query, variables }) => {
       variables,
     }),
   })
-  if (response === null) {
-    throw new Error('Error, no promise was created')
-  }
 
   if (response.status >= 400) {
     throw new Error(response.statusText)
