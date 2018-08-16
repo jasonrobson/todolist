@@ -31,10 +31,6 @@ export class AlertToastProvider extends Component {
     }
   }
 
-  // componentDidCatch(error, info) {
-  //   this.notify('error', error)
-  // }
-
   render() {
     const value = {
       ...this.state,
