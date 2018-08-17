@@ -1,9 +1,10 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { Compose } from 'react-powerplug'
 import styled from 'styled-components'
 import { AlertToastConsumer } from './AlertToastContext'
 import { TodosConsumer } from './TodosContext'
 import { TodoConsumer } from './TodoContext'
+import { errorCapture } from './ErrorCapture'
 
 const InputText = styled.input`
   background-color: ${({ typing }) => typing ? 'red' : 'white'};
@@ -13,14 +14,14 @@ const InputText = styled.input`
 `
 
 class TodoTextInput extends Component {
-  onKeyDown = async (event) => {
+  onKeyDown = (event) => {
     const {
       todo,
       changeTodo,
       resetProps,
       notify,
     } = this.props
-    try {
+    errorCapture(async () => {
       const newName = event.target.value
       if (event.key === 'Enter') {
         const payload = {
@@ -30,9 +31,7 @@ class TodoTextInput extends Component {
         await changeTodo(payload, todo)
         resetProps()
       }
-    } catch (error) {
-      notify('error', error.message)
-    }
+    }, notify)
   }
 
   onKeyUp = (event) => {
@@ -44,14 +43,12 @@ class TodoTextInput extends Component {
     const { todo } = this.props
 
     return (
-      <Fragment>
-        <InputText
-          defaultValue={todo.name}
-          onKeyDown={this.onKeyDown}
-          onKeyUp={this.onKeyUp}
-          {...this.props}
-        />
-      </Fragment>
+      <InputText
+        defaultValue={todo.name}
+        onKeyDown={this.onKeyDown}
+        onKeyUp={this.onKeyUp}
+        {...this.props}
+      />
     )
   }
 }

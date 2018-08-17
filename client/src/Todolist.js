@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { Compose } from 'react-powerplug'
 import _ from 'lodash'
 import Filters, { toFilter } from './Filters'
