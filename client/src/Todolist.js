@@ -27,15 +27,13 @@ class TodoList extends Component {
 
   render() {
     return (
-      <Fragment>
-        <Compose components={[OrderConsumer, FilterConsumer, TodosConsumer]}>
-          {({ orders }, { filterBy }, { todolist }) => {
-            const todolistFiltered = getFilteredTodos({ todolist, filterBy })
-            const todolistOrdered = _.orderBy(todolistFiltered, ['completed', 'name'], [orders.completed, orders.name])
-            return <TodosTableContainer todolist={todolist} todolistOrdered={todolistOrdered} />
-          }}
-        </Compose>
-      </Fragment>
+      <Compose components={[OrderConsumer, FilterConsumer, TodosConsumer]}>
+        {({ orders }, { filterBy }, { todolist }) => {
+          const todolistFiltered = getFilteredTodos({ todolist, filterBy })
+          const todolistOrdered = _.orderBy(todolistFiltered, ['completed', 'name'], [orders.completed, orders.name])
+          return <TodosTableContainer todolist={todolist} todolistOrdered={todolistOrdered} />
+        }}
+      </Compose>
     )
   }
 }
