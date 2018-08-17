@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import TodoListContainer from './Todolist'
 import { TodosProvider } from './TodosContext'
 import { FilterProvider } from './FilterContext'
@@ -8,11 +8,17 @@ import TodoInputContainer from './TodoInput'
 import { AlertToastProvider } from './AlertToastContext'
 
 const HeaderContent = () => (
-  <Fragment>
-    <h1 className="todostitle">
-      Todos
-    </h1>
-  </Fragment>
+  <h1 className="todostitle">
+    Todos
+  </h1>
+)
+
+const TodoBox = () => (
+  <div className="todobox">
+    <HeaderContent />
+    <TodoInputContainer />
+    <TodoListContainer />
+  </div>
 )
 
 const App = () => (
@@ -20,11 +26,7 @@ const App = () => (
     <OrderProvider>
       <FilterProvider>
         <TodosProvider>
-          <div className="todobox">
-            <HeaderContent />
-            <TodoInputContainer />
-            <TodoListContainer />
-          </div>
+          <TodoBox />
         </TodosProvider>
       </FilterProvider>
     </OrderProvider>
