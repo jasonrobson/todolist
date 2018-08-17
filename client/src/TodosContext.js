@@ -38,7 +38,7 @@ export class TodosProvider extends Component {
     const result = await updateTodo(newTodo)
     this.setState((prevState) => {
       const newTodoList = _.without(prevState.todolist, oldTodo)
-      return { todolist: [...newTodoList, _.cloneDeep({ id: result.id, name: result.name, completed: result.completed })] }
+      return { todolist: [...newTodoList, result] }
     })
   }
 
@@ -46,7 +46,7 @@ export class TodosProvider extends Component {
     const result = await createTodo({ ...payload, completed: false })
     this.setState((state) => {
       return {
-        todolist: [...state.todolist, { id: result.id, name: result.name, completed: result.completed }],
+        todolist: [...state.todolist, result],
       }
     })
   }
