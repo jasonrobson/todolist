@@ -7,8 +7,7 @@ class Resolvers::UpdateTodo < GraphQL::Function
   def call(_obj, args, _ctx)
     todo = Todo.find_by(id: args[:id])
     return unless todo.present?
-    # Todo.update(args[:todo])
-    todo.update(name: args[:todo][:name], completed: args[:todo][:completed])
+    todo.update(args[:todo].to_h)
     todo
   end
 end
