@@ -3,10 +3,11 @@ import { Compose } from 'react-powerplug'
 import { Button, ButtonGroup } from 'reactstrap'
 import { TodosConsumer } from './TodosContext'
 import { AlertToastConsumer } from './AlertToastContext'
+import { errorCapture } from './ErrorCapture'
 
 class TodoCheck extends Component {
 
-  onClick = async () => {
+  onClick = errorCapture(async () => {
     const {
       todo,
       changeTodo,
@@ -21,7 +22,7 @@ class TodoCheck extends Component {
     } catch (error) {
       notify('error', error.message)
     }
-  }
+  })
 
   render() {
     const {

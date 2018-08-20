@@ -14,25 +14,22 @@ const InputText = styled.input`
 `
 
 class TodoTextInput extends Component {
-  onKeyDown = (event) => {
+  onKeyDown = errorCapture(async (event) => {
     const {
       todo,
       changeTodo,
       resetProps,
-      notify,
     } = this.props
-    errorCapture(async () => {
-      const newName = event.target.value
-      if (event.key === 'Enter') {
-        const payload = {
-          ...todo,
-          name: newName,
-        }
-        await changeTodo(payload, todo)
-        resetProps()
+    const newName = event.target.value
+    if (event.key === 'Enter') {
+      const payload = {
+        ...todo,
+        name: newName,
       }
-    }, notify)
-  }
+      await changeTodo(payload, todo)
+      resetProps()
+    }
+  }, this.props.notify)
 
   onKeyUp = (event) => {
     const newName = event.target.value

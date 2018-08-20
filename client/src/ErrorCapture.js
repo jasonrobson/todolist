@@ -1,9 +1,10 @@
-// import React from 'react'
 
-export const errorCapture = (f, notify) => {
-  try {
-    f()
-  } catch (error) {
-    notify('error', error.message)
+export const errorCapture = (func, notify) => {
+  return async (...args) => {
+    try {
+      await func(...args)
+    } catch (error) {
+      notify('error', error.message)
+    }
   }
 }

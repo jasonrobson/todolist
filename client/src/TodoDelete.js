@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { TodosConsumer } from './TodosContext'
 import TrashCanImage from './delete.png'
 import { AlertToastConsumer } from './AlertToastContext'
+import { errorCapture } from './ErrorCapture'
 
 const InputButton = styled.button`
   width: 60px;
@@ -19,7 +20,7 @@ const InputImg = styled.img`
 `
 
 class TodoDelete extends Component {
-  onClick = async () => {
+  onClick = errorCapture(async () => {
     const {
       todo,
       deleteTodo,
@@ -30,7 +31,7 @@ class TodoDelete extends Component {
     } catch (error) {
       notify('error', error.message)
     }
-  }
+  })
 
   render() {
     return (

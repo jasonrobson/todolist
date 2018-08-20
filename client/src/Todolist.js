@@ -7,6 +7,7 @@ import { FilterConsumer } from './FilterContext'
 import { TodosConsumer } from './TodosContext'
 import TodoTable from './TodoTable'
 import { AlertToastConsumer } from './AlertToastContext'
+import { errorCapture } from './ErrorCapture'
 
 const getFilteredTodos = ({ todolist, filterBy }) => (
   todolist.filter(toFilter(filterBy))
@@ -15,14 +16,11 @@ const getFilteredTodos = ({ todolist, filterBy }) => (
 class TodoList extends Component {
   async componentDidMount() {
     const {
-      notify,
       initializeTodos,
+      notify,
     } = this.props
-    try {
-      await initializeTodos()
-    } catch (error) {
-      notify('error', error.message)
-    }
+    const tryInitializeTodos = errorCapture(async () => await initializeTodos(), notify)
+    tryInitializeTodos()
   }
 
   render() {

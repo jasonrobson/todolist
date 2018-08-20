@@ -3,6 +3,7 @@ import { Compose } from 'react-powerplug'
 import styled from 'styled-components'
 import { TodosConsumer } from './TodosContext'
 import { AlertToastConsumer } from './AlertToastContext'
+import { errorCapture } from './ErrorCapture'
 
 const InputText = styled.input`
   width: 500px;
@@ -13,7 +14,7 @@ class TodoInput extends Component {
     fieldName: '',
   }
 
-  onKeyDown = async (event) => {
+  onKeyDown = errorCapture(async (event) => {
     const {
       createTodo,
       notify,
@@ -29,7 +30,7 @@ class TodoInput extends Component {
         notify('error', error.message)
       }
     }
-  }
+  })
 
   handleFieldNameChange = (evt) => {
     this.setState({ fieldName: evt.target.value })
